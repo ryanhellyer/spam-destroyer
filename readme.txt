@@ -96,3 +96,4 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 * <a href="http://ronalfy.com/">Ronald Huereca</a> - JS advice<br />
 * <a href="https://twitter.com/shawngaffney">Shawn Gaffney</a> - Bug reporting<br />
 * <a href="http://konstruktors.com/">Kaspars Dambis</a> - Bug reporting<br />
+* <a href="http://www.wanderingjon.com/">Jon Brown</a> - Added error message filter</br />
