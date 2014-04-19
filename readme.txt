@@ -33,6 +33,8 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 == Changelog ==
 
+= 1.4.1 (19/4/2014) =
+* Cleaning up PHPDocs
 = 1.4 (21/3/2014) =
 * Now automatically deletes spam comments older than a set time (5 days)
 * Removed kill.php from trunk

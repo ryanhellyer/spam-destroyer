@@ -4,7 +4,7 @@ Plugin Name: Spam Destroyer
 Plugin URI: http://geek.ryanhellyer.net/products/spam-destroyer/
 Description: Kills spam dead in it's tracks
 Author: Ryan Hellyer
-Version: 1.4
+Version: 1.4.1
 Author URI: http://geek.ryanhellyer.net/
 
 Copyright (c) 2014 Ryan Hellyer
@@ -53,14 +53,15 @@ class Spam_Destroyer {
 	/**
 	 * Preparing to launch the almighty spam attack!
 	 * Spam, prepare for your imminent death!
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function __construct() {
 
 		// Activation hook
-		// Trigger a daily deletion of spam
-		register_activation_hook( __FILE__, array( $this, 'reg_spam_destroyer_cleanout' ) );
-		// Trigger an initial deletion of the spam before the end of the day
-		register_activation_hook( __FILE__, array( $this, 'schedule_single_deletion_event' ) );
+		register_activation_hook( __FILE__,                 array( $this, 'reg_spam_destroyer_cleanout' ) );
+		register_activation_hook( __FILE__,                 array( $this, 'schedule_single_deletion_event' ) );
 
 		// Add filters
 		add_filter( 'preprocess_comment',                   array( $this, 'check_for_comment_evilness' ) ); // Support for regular post/page comments
@@ -86,6 +87,9 @@ class Spam_Destroyer {
 	/**
 	 * Set spam key
 	 * Needs set at init due to using nonces
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function set_key() {
 
@@ -97,6 +101,9 @@ class Spam_Destroyer {
 
 	/**
 	 * Loading the javascript payload
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function load_payload() {
 
@@ -122,6 +129,9 @@ class Spam_Destroyer {
 
 	/**
 	 * An extra input field, which is intentionally filled with garble, but will be replaced dynamically with JS later
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function extra_input_field() {
 
@@ -138,6 +148,8 @@ class Spam_Destroyer {
 	 * Checks if the user is doing something evil
 	 * If they're detected as being evil, then the little bastards are killed dead in their tracks!
 	 * 
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 * @param array $comment The comment
 	 * @return array The comment
 	 */
@@ -212,6 +224,9 @@ class Spam_Destroyer {
 	 * Kills splogger signups, BuddyPress posts and replies and bbPress spammers dead in their tracks
 	 * This method is an alternative to pouring kerosine on sploggers and lighting a match.
 	 * Checks both the cookie and input key payloads
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function check_for_post_evilness( $result ) {
 
@@ -248,6 +263,9 @@ class Spam_Destroyer {
 	 * Redirect spammers
 	 * We need to redirect spammers so that we can serve a message telling
 	 * them why their post will not appear.
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function redirect_spam_commenters( $location ){
 
@@ -258,6 +276,9 @@ class Spam_Destroyer {
 
 	/*
 	 * Output error notice for spammers
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 */
 	public function error_notice() {
 
@@ -265,7 +286,9 @@ class Spam_Destroyer {
 			return;
 
 		// Display notice
-		echo '<div id="comments-error-message"><p>' . __( 'Sorry, but our system has recognised you as a spammer. If you believe this to be an error, please contact us so that we can rectify the situation.', 'spam-destroyer' ) . '</p></div>';
+		$default_error_notice = '<div id="comments-error-message"><p>' . __( 'Sorry, but our system has determined you may be a spammer. If you believe this to be an error, please contact us so that we can rectify the situation.', 'spam-destroyer' ) . '</p></div>';
+		$error_notice = apply_filters('sd_error_notice', $default_error_notice);
+		echo $error_notice;
 
 	}
 
@@ -273,6 +296,8 @@ class Spam_Destroyer {
 	 * Be gone evil demon spam!
 	 * Kill spam dead in it's tracks :)
 	 * 
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
 	 * @param array $comment The comment
 	 * @return array The comment
 	 */
@@ -301,8 +326,9 @@ class Spam_Destroyer {
 	/**
 	 * Spam shall not darken our doorstep for long.
 	 * Put your house in order, death is on the way.
+	 *
 	 * @author Brian Layman <plugins@thecodecave.com>
-	 * @since 2.4
+	 * @since 1.4
 	 */
 	public function schedule_single_deletion_event() {
 
@@ -319,8 +345,9 @@ class Spam_Destroyer {
 	/**
 	 * Spam shall not darken our doorstep for long.
 	 * Put your house in order, death is on the way.
+	 *
 	 * @author Brian Layman <plugins@thecodecave.com>
-	 * @since 2.4
+	 * @since 1.4
 	 */
 	public function reg_spam_destroyer_cleanout() {
 
@@ -335,9 +362,10 @@ class Spam_Destroyer {
 	/**
 	 * Ask not for whom the bell tolls, 
 	 * it tolls for thee, Spam... 
-	 * This routine is intended to be called my the scheduled event.
+	 * This routine is intended to be called by the scheduled event.
+	 *
 	 * @author Brian Layman <plugins@thecodecave.com>
-	 * @since 2.4
+	 * @since 1.4
 	 */
 	public function apply_cleanout() {
 
