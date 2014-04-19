@@ -15,7 +15,7 @@ Kills spam dead in it's tracks. Be gone evil demon spam!
 Stops automated spam while remaining as unobtrusive as possible to regular commenters. <a href="http://geek.ryanhellyer.net/products/spam-destroyer/">The Spam Destroyer plugin</a> is intended to be effortless to use, simply install
 and enjoy a spam free website :)
 
-<small>This version of the plugin does not work for user registrations, bbPress or BuddyPress, however there is an experimental version available which does. You can download the experimental version of the plugin from the <a href="http://geek.ryanhellyer.net/products/spam-destroyer/">Spam Destroyer page on geek.ryanhellyer.net</a>. If you test it, I'd love to <a href="http://geek.ryanhellyer.net/contact/">hear about the results</a>.</small>
+<small>This plugin does not currently work very well for user registrations, bbPress or BuddyPress. We are looking for someone to assist with ensuring this works well in future, so if you would like to help you then please <a href="http://geek.ryanhellyer.net/contact/">get in touch</a>.</small>
 
 == Installation ==
 
@@ -23,7 +23,7 @@ Simply install and activate the plugin. No settings necessary.
 
 For more information, visit the <a href="http://geek.ryanhellyer.net/products/spam-destroyer/">Spam Destroyer plugin page</a>.
 
-<small>Note: Spam Destroyer apparently does not work in conjunction with the Jetpack plugin. That plugin has a nasty way of handling it's commenting system which requires you to connect to an external service and will not work if your installation is not connected to the internet (which is the case for all my development sites) and as such this problem will not be fixed any time soon. If the Jetpack team fix these major problems I will happily make the plugin compatible with it, but in the mean time I suggest avoiding the Jetpack plugin at all costs.</small>
+<small>Note: Spam Destroyer apparently does not work in conjunction with the Jetpack plugin. That plugin has a nasty way of handling it's commenting system which requires you to connect to an external service and will not work if your installation is not connected to the internet (which is the case for all my development sites) and as such this problem will not be fixed any time soon. If the Jetpack team fix these major problems I will happily make the plugin compatible with it, but in the mean time I suggest avoiding the Jetpack plugin.</small>
 
 
 == Frequently Asked Questions ==
