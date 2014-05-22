@@ -4,7 +4,7 @@ Plugin Name: Spam Destroyer
 Plugin URI: http://geek.ryanhellyer.net/products/spam-destroyer/
 Description: Kills spam dead in it's tracks
 Author: Ryan Hellyer
-Version: 1.4.1
+Version: 1.7
 Author URI: http://geek.ryanhellyer.net/
 
 Copyright (c) 2014 Ryan Hellyer
@@ -49,6 +49,7 @@ class Spam_Destroyer {
 	public $first_deletion = 120; // How soon in seconds after activation should the first deletion be triggered
 	public $spam_delete_limit = 200; // Maximum number of spam IDs to delete at a time
 	public $spam_deletion_interval = 600; // If more than spam_delete_limit comments exist, trigger another deletion after this interval in seconds
+	public $level = 'low'; // Low provides minimal protection. Medium provides significant protection. High does not exist yet :P
 
 	/**
 	 * Preparing to launch the almighty spam attack!
@@ -78,7 +79,6 @@ class Spam_Destroyer {
 		add_action( 'bbp_theme_before_topic_form_content',  array( $this, 'extra_input_field' ) ); // bbPress signup page
 		add_action( 'bbp_theme_before_reply_form_content',  array( $this, 'extra_input_field' ) ); // bbPress signup page
 		add_action( 'register_form',                        array( $this, 'extra_input_field' ) ); // bbPress user registration page
-		add_action( 'comment_form_top',                     array( $this, 'error_notice' ) );		// Message displayed when spammer is discovered
 		add_action( 'spam_destroyer_cleanout',				array( $this, 'apply_cleanout' ) ); 	// Fires from registered event
 		add_action( 'spam_destroyer_cleanout_single',		array( $this, 'apply_cleanout' ) ); 	// Fires from registered event
 
@@ -199,6 +199,11 @@ class Spam_Destroyer {
 
 		} else {
 
+			// If they answered the CAPTCHA, then let 'em fly on through :)'
+			if ( '4' == $_POST['spam-killer-captcha'] ) {
+				return $comment;
+			}
+
 			// Check the hidden input field against the key
 			if ( $_POST['killer_value'] != $this->spam_key ) {
 				$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
@@ -259,39 +264,6 @@ class Spam_Destroyer {
 		return $result;
 	}
 
-	/*
-	 * Redirect spammers
-	 * We need to redirect spammers so that we can serve a message telling
-	 * them why their post will not appear.
-	 *
-	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
-	 * @since 1.0
-	 */
-	public function redirect_spam_commenters( $location ){
-
-		$newurl = substr( $location, 0, strpos( $location, "#comment" ) );
-		return add_query_arg( 'spammer', 'confirm', $newurl ) . '#reply-title';
-
-	}
-
-	/*
-	 * Output error notice for spammers
-	 *
-	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
-	 * @since 1.0
-	 */
-	public function error_notice() {
-
-		if ( ! isset( $_GET['spammer'] ) )
-			return;
-
-		// Display notice
-		$default_error_notice = '<div id="comments-error-message"><p>' . __( 'Sorry, but our system has determined you may be a spammer. If you believe this to be an error, please contact us so that we can rectify the situation.', 'spam-destroyer' ) . '</p></div>';
-		$error_notice = apply_filters('sd_error_notice', $default_error_notice);
-		echo $error_notice;
-
-	}
-
 	/**
 	 * Be gone evil demon spam!
 	 * Kill spam dead in it's tracks :)
@@ -308,19 +280,48 @@ class Spam_Destroyer {
 		// add_filter( 'comment_post', create_function( '$id', 'wp_delete_comment( $id ); die( \'This comment has been deleted\' );' ) );
 		// add_filter( 'pre_comment_approved', create_function( '$a', 'return 0;' ) );
 
-		// If permalinks are on, then redirect to a query var (allows us to provide message in case of false positives - which should never happen, but best be on the safe side!)
-		if ( '' != get_option( 'permalink_structure' ) ) {
-			add_filter( 'comment_post_redirect', array( $this, 'redirect_spam_commenters' ) );
-		}
-
 		// Bypass Akismet since comment is spam
 		if ( function_exists( 'akismet_auto_check_comment' ) ) {
 			remove_filter( 'preprocess_comment', 'akismet_auto_check_comment', 10 );
 		}
 
-		// Return the comment anyway, since it's nice to keep it in the spam queue in case we messed up
-		return $comment;
+		$error = '
+			<p>' . __( 'Please answer the following question to confirm you are a human.', 'spam-killer' ) . '</p>
+			<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
 
+				<p>
+					<label>' . __( 'What does 1 + 3 equal?', 'spam-killer' ) . '</label>
+					<input type="text" value="" name="spam-killer-captcha" />
+				</p>
+
+				<p>&nbsp;</p>
+
+				<p class="comment-form-author">
+					<label for="author">' . __( 'Name' ) . ' <span class="required">*</span></label> 
+					<input id="author" name="author" type="text" value="' . esc_attr( $comment['comment_author'] ) . '" size="30" aria-required="true" />
+				</p>
+
+				<p class="comment-form-email">
+					<label for="email">' . __( 'Email' ) . ' <span class="required">*</span></label>
+					<input id="email" name="email" type="email" value="' . esc_attr( $comment['comment_author_email'] ) . '" size="30" aria-required="true" />
+				</p>
+				<p class="comment-form-url">
+					<label for="url">' . __( 'Website' ) . '</label>
+					<input id="url" name="url" type="url" value="' . esc_attr( $comment['comment_author_url'] ) . '" size="30" />
+				</p>
+				<p class="comment-form-comment">
+					<label for="comment">' . __( 'Comment' ) . '</label>
+					<br />
+					<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true">' . $comment['comment_content'] . '</textarea>
+				</p>
+
+				<p class="form-submit">
+					<input name="submit" type="submit" id="submit" value="' . __( 'Submit answer' ) . '" />
+					<input type="hidden" name="comment_post_ID" value="' . esc_attr( $comment['comment_post_ID'] ) . '" id="comment_post_ID" />
+					<input type="hidden" name="comment_parent" id="comment_parent" value="' . esc_attr( $comment['comment_parent'] ) . '" />
+				</p>
+			</form>';
+		wp_die( $error );
 	}
 
 	/**
@@ -334,7 +335,7 @@ class Spam_Destroyer {
 
 		// error_log( "schedule_single_deletion_event " );
 		// Kick off an initial deletion
-		if ( !wp_next_scheduled( 'spam_destroyer_cleanout_single' ) ) {
+		if ( ! wp_next_scheduled( 'spam_destroyer_cleanout_single' ) ) {
 			// error_log( "!!! Spam Destroyer initiated " );
 			// error_log( "!!! Next event scheduled for now + " .  $this->first_deletion . " Seconds." );
 			wp_schedule_single_event( time() + $this->first_deletion , 'spam_destroyer_cleanout_single' ); // Start deleting after one minute
@@ -366,6 +367,7 @@ class Spam_Destroyer {
 	 *
 	 * @author Brian Layman <plugins@thecodecave.com>
 	 * @since 1.4
+	 * @global $wpdb  The primary WordPress database object
 	 */
 	public function apply_cleanout() {
 
