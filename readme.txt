@@ -1,19 +1,24 @@
 === Spam Destroyer ===
-Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman
+Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman, forsite
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
 Tags: spam, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate
-Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 1.4.1
+Requires at least: 3.9
+Stable tag: 1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+
+
+COMING SOON:
+Integration of "Antispam for all fields" plugin
+
+
 
 Kills spam dead in it's tracks. Be gone evil demon spam!
 
 == Description ==
 
-Stops automated spam while remaining as unobtrusive as possible to regular commenters. <a href="http://geek.ryanhellyer.net/products/spam-destroyer/">The Spam Destroyer plugin</a> is intended to be effortless to use, simply install
-and enjoy a spam free website :)
+Stops automated spam while remaining as unobtrusive as possible to regular commenters. <a href="http://geek.ryanhellyer.net/products/spam-destroyer/">The Spam Destroyer plugin</a> is intended to be effortless to use, simply install and enjoy a spam free website :)
 
 <small>This plugin does not currently work very well for user registrations, bbPress or BuddyPress. We are looking for someone to assist with ensuring this works well in future, so if you would like to help you then please <a href="http://geek.ryanhellyer.net/contact/">get in touch</a>.</small>
 
@@ -32,6 +37,21 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 
 == Changelog ==
+
+1.8
+= Addition of black-list for higher spam settings
+= Implemented time-limit for answering CAPTCHA questions
+
+1.7.1
+= Removal of spam cleanout since redundant after addition of CAPTCHA fallback
+
+1.7
+= Addition of text image CAPTCHA
+= Modification of key setup - two way encryption
+= Low, key never changes; medium, key changes with nonce
+
+1.6
+= Addition of math CAPTCHA
 
 = 1.4.1 (19/4/2014) =
 * Cleaning up PHPDocs
