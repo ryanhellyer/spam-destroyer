@@ -8,12 +8,6 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-
-COMING SOON:
-Integration of "Antispam for all fields" plugin
-
-
-
 Kills spam dead in it's tracks. Be gone evil demon spam!
 
 == Description ==
