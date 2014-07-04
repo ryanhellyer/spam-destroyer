@@ -28,10 +28,6 @@ class Spam_Destroyer {
 	 */
 	public function __construct() {
 
-		// Activation hook
-		register_activation_hook( __FILE__,                 array( $this, 'reg_spam_destroyer_cleanout' ) );
-		register_activation_hook( __FILE__,                 array( $this, 'schedule_single_deletion_event' ) );
-
 		// Add filters
 		add_filter( 'preprocess_comment',                   array( $this, 'check_for_comment_evilness' ) ); // Support for regular post/page comments
 		add_filter( 'bbp_new_topic_pre_content',            array( $this, 'check_for_post_evilness' ), 1 ); // Support for bbPress topics
