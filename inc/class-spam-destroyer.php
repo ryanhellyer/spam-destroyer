@@ -506,6 +506,6 @@ class Spam_Destroyer {
 			<input type="text" value="" name="spam-killer-captcha" />
 		</p>';
 	}
-	
+
 }
 $spam_destroyer = new Spam_Destroyer();
