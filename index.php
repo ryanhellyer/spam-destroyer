@@ -39,7 +39,7 @@ license.txt file included with this plugin for more information.
 
 define( 'SPAM_DESTROYER_DIR', dirname( __FILE__ ) );
 define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
-//$black_list = get_site_option( 'spam-killer-blacklist' );echo $black_list;die;
+
 require( 'inc/class-spam-destroyer.php' );
 require( 'inc/class-spam-destroyer-generate-captcha.php' );
 require( 'inc/class-spam-destroyer-captcha-question.php' );
