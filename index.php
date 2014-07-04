@@ -45,3 +45,4 @@ require( 'inc/class-spam-destroyer-generate-captcha.php' );
 require( 'inc/class-spam-destroyer-captcha-question.php' );
 require( 'inc/class-spam-destroyer-protection-level.php' );
 require( 'inc/class-spam-destroyer-black-list.php' );
+require( 'inc/class-spam-destroyer-add-meta.php' );

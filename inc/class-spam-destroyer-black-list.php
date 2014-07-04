@@ -48,6 +48,7 @@ class Spam_Destroyer_Black_List extends Spam_Destroyer {
 					strpos( $comment['comment_author_url'], $banned_string ) !== false ||
 					strpos( $comment['comment_content'], $banned_string ) !== false
 				) {
+					$comment['failed'][] = 'Naughty word used';
 					$this->kill_spam_dead( $comment ); // Death to those who use NAUGHTY WORDS!
 				}
 			}

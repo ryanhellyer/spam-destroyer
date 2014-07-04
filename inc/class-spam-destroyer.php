@@ -18,6 +18,7 @@ class Spam_Destroyer {
 	public $min_word_length; // Min word length (for non-dictionary random text generation)
 	public $max_word_length; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
 	public $captcha_time_passed = 600; // Time limit on answering individual CAPTCHA questions
+	public $comment_issues;
 
 	/**
 	 * Preparing to launch the almighty spam attack!
@@ -299,6 +300,7 @@ class Spam_Destroyer {
 
 			// If user answers CAPTCHA, then let them sail on through
 			if ( 'very-high' != $this->level && isset( $_POST['spam-killer-question'] ) ) {
+				$this->comment_issues[] = 'CAPTCHA question answered';
 
 				// Grab question
 				$text = $this->decrypt( $_POST['spam-killer-question'] );
@@ -322,6 +324,7 @@ class Spam_Destroyer {
 
 			// Check the hidden input field against the key
 			if ( $_POST['killer_value'] != $this->spam_key ) {
+				$this->comment_issues[] = 'Hidden input field not set';
 				$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
 			}
 
@@ -330,6 +333,7 @@ class Spam_Destroyer {
 
 				// If time not set correctly, then assume it's spam
 				if ( $_COOKIE[$this->spam_key] > 1 && ( ( time() - $_COOKIE[$this->spam_key] ) < $this->speed ) ) {
+					$this->comment_issues[] = 'Time not set correctly';
 					$this->kill_spam_dead( $comment ); // Something's up, since the commenters cookie time frame doesn't match ours
 				}
 
@@ -356,11 +360,14 @@ class Spam_Destroyer {
 
 				$answer = $_POST['spam-killer-captcha'];
 				if ( $question != $answer || '' == $question ) {
+					$this->comment_issues[] = 'CAPTCHA not answered correctly on very high level';
 					$this->kill_spam_dead( $comment ); // Ohhhh! Cookie not set, so killing the little dick before it gets through!
 				}
 			}
 
 		}
+
+		$this->comment_issues[] = 'Passed!';
 
 		// YAY! It's a miracle! Something actually got listed as a legit comment :) W00P W00P!!!
 		return $comment;
@@ -430,6 +437,7 @@ class Spam_Destroyer {
 	 */
 	public function decrypt( $text ) {
 		$text = base64_decode( $text );
+
 		if ( function_exists( 'openssl_decrypt' ) ) {
 			$text = openssl_decrypt(
 				$text, // The text to be decrypted
