@@ -35,6 +35,7 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 1.8
 = Addition of black-list for higher spam settings
 = Implemented time-limit for answering CAPTCHA questions
+= Moved to a modular system for handling extra protective levels
 
 1.7.1
 = Removal of spam cleanout since redundant after addition of CAPTCHA fallback
@@ -46,6 +47,9 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 1.6
 = Addition of math CAPTCHA
+
+1.5
+= Addition of crude API for handling CAPTCHA's
 
 = 1.4.1 (19/4/2014) =
 * Cleaning up PHPDocs
