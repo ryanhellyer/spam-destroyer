@@ -327,40 +327,19 @@ class Spam_Destroyer {
 
 			// Check for cookies presence
 			if ( isset( $_COOKIE[ $this->spam_key ] ) ) {
+
 				// If time not set correctly, then assume it's spam
 				if ( $_COOKIE[$this->spam_key] > 1 && ( ( time() - $_COOKIE[$this->spam_key] ) < $this->speed ) ) {
 					$this->kill_spam_dead( $comment ); // Something's up, since the commenters cookie time frame doesn't match ours
 				}
+
 			} else {
 				$this->kill_spam_dead( $comment ); // Ohhhh! Cookie not set, so killing the little dick before it gets through!
 			}
 
-			// On the high protection mode (or higher), check a blacklist
+			// Add extra protection here
 			if ( 'high' == $this->level || 'very-high' == $this->level ) {
-
-				// Grab comment blacklist - in an option so that we can leverage object caching when available
-				$black_list = get_site_option( 'spam-killer-blacklist' );
-				if ( '' == $black_list ) {
-					$black_list = file_get_contents( SPAM_DESTROYER_DIR . '/assets/black-list.txt' );
-					update_site_option( 'spam-killer-blacklist', $black_list );
-				}
-
-				// Loop through black list
-				$black_list = explode( "\n", $black_list );
-				foreach( $black_list as $key => $banned_string ) {
-
-					if ( '' != $banned_string ) {
-						// Check each bad word
-						if (
-							strpos( $comment['comment_author'], $banned_string ) !== false ||
-							strpos( $comment['comment_author_email'], $banned_string ) !== false ||
-							strpos( $comment['comment_author_url'], $banned_string ) !== false ||
-							strpos( $comment['comment_content'], $banned_string ) !== false
-						) {
-							$this->kill_spam_dead( $comment ); // Death to those who use NAUGHTY WORDS!
-						}
-					}
-				}
+				$comment = apply_filters( 'spam_destroyer_kill_high_level', $comment );
 			}
 
 			// On very-high protection mode, comments should be blocked even if CAPTCHA is answered
