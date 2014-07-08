@@ -1,4 +1,3 @@
-/* This is a black list for each comment form field */
 _account
 _article
 _asics

@@ -342,28 +342,7 @@ class Spam_Destroyer {
 			}
 
 			// Add extra protection here
-			if ( 'high' == $this->level || 'very-high' == $this->level ) {
-				$comment = apply_filters( 'spam_destroyer_kill_high_level', $comment );
-			}
-
-			// On very-high protection mode, comments should be blocked even if CAPTCHA is answered
-			if ( 'very-high' == $this->level ) {
-
-				// Grab question
-				$text = $this->decrypt( $_POST['spam-killer-question'] );
-				$text = explode( '|||', $text );
-				$question = $text[0];
-				$time = $text[1];
-
-				// Confirm question was answered recently
-				$this->check_time( $time, $comment );
-
-				$answer = $_POST['spam-killer-captcha'];
-				if ( $question != $answer || '' == $question ) {
-					$this->comment_issues[] = 'CAPTCHA not answered correctly on very high level';
-					$this->kill_spam_dead( $comment ); // Ohhhh! Cookie not set, so killing the little dick before it gets through!
-				}
-			}
+			$comment = apply_filters( 'spam_destroyed_here', $comment );
 
 		}
 
@@ -462,25 +441,31 @@ class Spam_Destroyer {
 	 */
 	public function kill_spam_dead( $comment ) {
 
-		// Set as spam
-		add_filter( 'pre_comment_approved', create_function( '$a', 'return \'spam\';' ) );
-
 		/*
 		 * Let's give them one less chance to prove they're human :)
 		 * This is necessary to allow JavaScript or Cookie'less users to comment.
 		 */
 		$captcha = new Spam_Destroyer_CAPTCHA_Question();
 		$question = $captcha->get_encrypted_question();
-		$error = '
+
+		// CRUDE HACK! - no way was found to send extra data from this form to the comment processor, so we're temporarily tacking it on the front of the comment and removing it later
+		if ( isset( $commentdata['failed'] ) ) {
+			$comment['comment_content'] = esc_html( $comment['failed'] ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
+		} else {
+			$comment['comment_content'] = __( 'no reason given', 'spam-killer' ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
+		}
+
+		$error = '';
+		$error .= '
 			<p>' . __( 'Please confirm you are human by typing the words in the box below.', 'spam-killer' ) . '</p>
 			<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
 				' . $this->get_captcha_image( $question )
 				. $this->get_extra_input_field() . '
 
 				<div style="display:none">
-					<input id="author" name="author" type="hidden" value="' . esc_attr( $comment['comment_author'] ) . '" size="30" aria-required="true" />
-					<input id="email" name="email" type="hidden" value="' . esc_attr( $comment['comment_author_email'] ) . '" size="30" aria-required="true" />
-					<input id="url" name="url" type="hidden" value="' . esc_attr( $comment['comment_author_url'] ) . '" size="30" />
+					<input id="author" name="author" type="hidden" value="' . esc_attr( $comment['comment_author'] ) . '" />
+					<input id="email" name="email" type="hidden" value="' . esc_attr( $comment['comment_author_email'] ) . '" />
+					<input id="url" name="url" type="hidden" value="' . esc_attr( $comment['comment_author_url'] ) . '" />
 					<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true">' . esc_textarea( $comment['comment_content'] ) . '</textarea>
 				</div>
 
@@ -495,6 +480,11 @@ class Spam_Destroyer {
 				var spam_destroyer = {"key":"' . $this->spam_key . '","lifetime":"' . absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) . '"};
 			</script>
 			<script src="' . SPAM_DESTROYER_URL . 'kill.js"></script>';
+
+		if ( isset( $comment['failed'] ) ) {
+			$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-killer' ) . ' ' . esc_html( $comment['failed'] ) . '\');">' . __( 'Why do I need to answer this?', 'spam-killer' ) . '</a></p>';
+		}
+
 		wp_die( $error );
 	}
 

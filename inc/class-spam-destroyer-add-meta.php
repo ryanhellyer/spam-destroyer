@@ -30,12 +30,31 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 
 	}
 
+	/*
+	 * Add reason for failing security check as comment meta
+	 *
+	 * This method uses an extraordinarily crude hack to get the meta data out. This
+	 * was due to an inability to send data through wp-comments.php. This may be possible
+	 * to do in more "correct" way, but I could not figure it out. If you know how
+	 * to improve this, please let me know :)
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.8
+	 * @param  string   $id            The comment ID
+	 * @param  object   $commentdata   The comment object
+	 */
 	public function add_issues_to_comment_meta( $id, $commentdata ) {
-		print_r( $this->comment_issues );die(' done');
-		update_comment_meta( $id, 'issues', $commentdata['issues'] );
+
+		// CRUDE HACK! - no way was found to send extra data from this form to the comment processor, so we're temporarily tacking it on the front of the comment and removing it later
+		$comment = explode( '_somerandomstringgoeshere_', $commentdata->comment_content );
+
+//print_r( $_POST );
+//die;
+
+		$failed = $comment[0];
+		// And now to actually save the data :)
+		update_comment_meta( $id, 'issues', $failed );
 	}
-//	do_action( 'wp_insert_comment', $id, $comment );
-//issues
 
 	/*
 	 * Add new heading to comments tables
@@ -46,7 +65,7 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 	 * @return  array   $columns   The modified comments columns
 	 */
 	public function filter_comment_column( $columns ) {
-		$columns['issues'] = __( 'Issues' );
+		$columns['failed'] = __( 'Notes' );
 		return $columns;
 	}
 
