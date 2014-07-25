@@ -448,14 +448,6 @@ class Spam_Destroyer {
 		$captcha = new Spam_Destroyer_CAPTCHA_Question();
 		$question = $captcha->get_encrypted_question();
 
-		// CRUDE HACK! - no way was found to send extra data from this form to the comment processor, so we're temporarily tacking it on the front of the comment and removing it later
-//		if ( isset( $commentdata['failed'] ) ) {
-//			$comment['comment_content'] = esc_html( $comment['failed'] ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
-//		} else {
-//			$comment['comment_content'] = __( 'no reason given', 'spam-killer' ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
-//		}
-
-
 		$error = '';
 		$error .= '
 		<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
@@ -489,8 +481,7 @@ class Spam_Destroyer {
 			// Set the key as JS variable for use in the payload
 			var spam_destroyer = {"key":"' . $this->spam_key . '","lifetime":"' . absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) . '"};
 		</script>
-		<script src="' . SPAM_DESTROYER_URL . 'kill.js"></script>';
-
+		<script src="' . esc_url( SPAM_DESTROYER_URL . 'kill.js' ) . '"></script>';
 
 		wp_die( $error );
 	}

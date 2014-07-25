@@ -36,6 +36,7 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 = Addition of black-list for higher spam settings
 = Implemented time-limit for answering CAPTCHA questions
 = Moved to a modular system for handling extra protective levels
+= Addition of notices in back-end to describe what checks the comment passed
 
 1.7.1
 = Removal of spam cleanout since redundant after addition of CAPTCHA fallback

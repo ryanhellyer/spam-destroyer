@@ -51,6 +51,7 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 			$failed = wp_kses_post( $_POST['failed'] );
 			update_comment_meta( $id, 'issues', $failed );
 		}
+
 	}
 
 	/*
