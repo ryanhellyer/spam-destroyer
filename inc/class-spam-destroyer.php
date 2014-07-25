@@ -449,16 +449,17 @@ class Spam_Destroyer {
 		$question = $captcha->get_encrypted_question();
 
 		// CRUDE HACK! - no way was found to send extra data from this form to the comment processor, so we're temporarily tacking it on the front of the comment and removing it later
-		if ( isset( $commentdata['failed'] ) ) {
-			$comment['comment_content'] = esc_html( $comment['failed'] ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
-		} else {
-			$comment['comment_content'] = __( 'no reason given', 'spam-killer' ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
-		}
+//		if ( isset( $commentdata['failed'] ) ) {
+//			$comment['comment_content'] = esc_html( $comment['failed'] ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
+//		} else {
+//			$comment['comment_content'] = __( 'no reason given', 'spam-killer' ) . '_somerandomstringgoeshere_' . $comment['comment_content'];
+//		}
+
 
 		$error = '';
 		$error .= '
+		<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
 			<p>' . __( 'Please confirm you are human by typing the words in the box below.', 'spam-killer' ) . '</p>
-			<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
 				' . $this->get_captcha_image( $question )
 				. $this->get_extra_input_field() . '
 
@@ -473,17 +474,23 @@ class Spam_Destroyer {
 					<input name="submit" type="submit" id="submit" value="' . __( 'Submit answer' ) . '" />
 					<input type="hidden" name="comment_post_ID" value="' . esc_attr( $comment['comment_post_ID'] ) . '" id="comment_post_ID" />
 					<input type="hidden" name="comment_parent" id="comment_parent" value="' . esc_attr( $comment['comment_parent'] ) . '" />
-				</p>
-			</form>
-			<script>
-				// Set the key as JS variable for use in the payload
-				var spam_destroyer = {"key":"' . $this->spam_key . '","lifetime":"' . absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) . '"};
-			</script>
-			<script src="' . SPAM_DESTROYER_URL . 'kill.js"></script>';
+				</p>';
 
 		if ( isset( $comment['failed'] ) ) {
-			$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-killer' ) . ' ' . esc_html( $comment['failed'] ) . '\');">' . __( 'Why do I need to answer this?', 'spam-killer' ) . '</a></p>';
+			$failed = $comment['failed'][0];
+			$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-killer' ) . ' ' . esc_html( $failed ) . '\');">' . __( 'Why do I need to answer this?', 'spam-killer' ) . '</a></p>';
+			$error .= '<input id="failed" name="failed" type="hidden" value="' . esc_attr( $failed ) . '" />';
+			$error .= '<input id="comment_karma" name="comment_karma" type="hidden" value="' . esc_attr( $failed ) . '" />';
 		}
+
+		$error .= '
+		</form>
+		<script>
+			// Set the key as JS variable for use in the payload
+			var spam_destroyer = {"key":"' . $this->spam_key . '","lifetime":"' . absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) . '"};
+		</script>
+		<script src="' . SPAM_DESTROYER_URL . 'kill.js"></script>';
+
 
 		wp_die( $error );
 	}

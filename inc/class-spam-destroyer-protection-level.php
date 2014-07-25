@@ -40,7 +40,7 @@ if ( isset( $_GET['test'] ) ) {
 		add_action( 'init',               array( $this, 'set_protection_level' ) );
 		add_action( 'init',               array( $this, 'output_stats_for_testing' ) );
 	}
-	
+
 	/**
 	 * For testing purposes only
 	 */
@@ -56,7 +56,7 @@ if ( isset( $_GET['test'] ) ) {
 	 * Set protection level
 	 */
 	public function set_protection_level() {
-		$this->protection = get_option( 'spam_destroyer_level' );
+		$this->protection = get_option( 'spam-killer-level' );
 	}
 
 	/*
@@ -67,9 +67,9 @@ if ( isset( $_GET['test'] ) ) {
 		$spam = $this->get_stats( 'spam', $time = 'previous' );
 		$rate = ( 1 - ( $false/ $spam ) ) * 100;
 		if ( $rate > 99.9 ) {
-			update_option( 'spam_destroyer_level', 'low' );
+			update_option( 'spam-killer-level', 'low' );
 		} else {
-			update_option( 'spam_destroyer_level', 'high' );
+			update_option( 'spam-killer-level', 'high' );
 		}
 	}
 

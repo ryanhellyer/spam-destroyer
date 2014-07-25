@@ -33,10 +33,11 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 	/*
 	 * Add reason for failing security check as comment meta
 	 *
-	 * This method uses an extraordinarily crude hack to get the meta data out. This
-	 * was due to an inability to send data through wp-comments.php. This may be possible
-	 * to do in more "correct" way, but I could not figure it out. If you know how
-	 * to improve this, please let me know :)
+	 * We are using comment meta here, but an alternative is to use the comment karma field.
+	 * The comment karma field is intended for this sort of data, but that field was added
+	 * long before comment meta was integrated into WordPress core, so we are treating it as
+	 * a legacy field and avoiding using it due to this. If you have a boner for using the
+	 * comments karma field, feel free to get in touch and convince us to do it differently ;)
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.8
@@ -45,15 +46,11 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 	 */
 	public function add_issues_to_comment_meta( $id, $commentdata ) {
 
-		// CRUDE HACK! - no way was found to send extra data from this form to the comment processor, so we're temporarily tacking it on the front of the comment and removing it later
-		$comment = explode( '_somerandomstringgoeshere_', $commentdata->comment_content );
-
-//print_r( $_POST );
-//die;
-
-		$failed = $comment[0];
 		// And now to actually save the data :)
-		update_comment_meta( $id, 'issues', $failed );
+		if ( isset( $_POST['failed'] ) ) {
+			$failed = wp_kses_post( $_POST['failed'] )
+			update_comment_meta( $id, 'issues', $failed );
+		}
 	}
 
 	/*
