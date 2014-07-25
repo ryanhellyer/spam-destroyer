@@ -48,7 +48,7 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 
 		// And now to actually save the data :)
 		if ( isset( $_POST['failed'] ) ) {
-			$failed = wp_kses_post( $_POST['failed'] )
+			$failed = wp_kses_post( $_POST['failed'] );
 			update_comment_meta( $id, 'issues', $failed );
 		}
 	}
@@ -62,7 +62,7 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 	 * @return  array   $columns   The modified comments columns
 	 */
 	public function filter_comment_column( $columns ) {
-		$columns['failed'] = __( 'Notes' );
+		$columns['issues'] = __( 'Notes' );
 		return $columns;
 	}
 
