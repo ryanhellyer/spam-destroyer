@@ -40,6 +40,7 @@ license.txt file included with this plugin for more information.
 define( 'SPAM_DESTROYER_DIR', dirname( __FILE__ ) );
 define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
 
+// Load front-end and admin panel files
 require( 'inc/class-spam-destroyer.php' );
 require( 'inc/class-spam-destroyer-generate-captcha.php' );
 require( 'inc/class-spam-destroyer-captcha-question.php' );
@@ -47,4 +48,8 @@ require( 'inc/class-spam-destroyer-protection-level.php' );
 require( 'inc/class-spam-destroyer-black-list.php' );
 require( 'inc/class-spam-destroyer-forced-captcha.php' );
 require( 'inc/class-spam-destroyer-add-meta.php' );
-require( 'inc/class-spam-destroyer-options-page.php' );
+
+// Load admin panel only files
+if ( is_admin() ) {
+	require( 'inc/class-spam-destroyer-options-page.php' );
+}

@@ -28,9 +28,31 @@ class Spam_Destroyer_Options_Page {
 		);
 
 		// Add to hooks
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_menu', array( $this, 'options_add_page' ) );
+		add_action( 'admin_init',                                        array( $this, 'register_settings' ) );
+		add_action( 'admin_menu',                                        array( $this, 'options_add_page' ) );
+		add_action( 'admin_menu',                                        array( $this, 'remove_menu_link' ), 20 );
+		add_filter( 'plugin_action_links_' . 'spam-destroyer/index.php', array( $this, 'plugins_page_link' ) );
+	}
 
+	/**
+	 * Add a Purge Cache link to the plugin list
+	 */
+	public function plugins_page_link( $links ) {
+
+		$links[] = sprintf( 
+				'<a href="%s">%s</a>',
+				admin_url( 'admin.php?page=theme_options' ), 
+				__( 'Settings' ) 
+			);
+
+		return $links;
+	}
+
+	/*
+	 * Remove the admin page menu link
+	 */
+	public function remove_menu_link() {
+		remove_menu_page( 'theme_options' );
 	}
 
 	/**
