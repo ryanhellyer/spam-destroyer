@@ -1,5 +1,4 @@
 /* This is a black list for the contents of URLs */
-Dresden
 viagra
 cialis
 4U
