@@ -13,7 +13,7 @@ class Spam_Destroyer {
 	public $speed = 5; // Will be killed as spam if posted faster than this
 	public $spam_days = 5; // How many days to keep spam around
 	public $first_deletion = 120; // How soon in seconds after activation should the first deletion be triggered
-	public $level = 'high'; // Low provides minimal protection. Medium provides significant protection. High does not exist yet :P
+	public $level; // Set spam protection level
 	public $encryption_method = 'AES-256-CBC'; // The encryption method used
 	public $min_word_length; // Min word length (for non-dictionary random text generation)
 	public $max_word_length; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
@@ -28,6 +28,9 @@ class Spam_Destroyer {
 	 * @since 1.0
 	 */
 	public function __construct() {
+
+		// Set variables
+		$this->level = get_option( 'spam-killer-level' );
 
 		// Add filters
 		add_filter( 'preprocess_comment',                   array( $this, 'check_for_comment_evilness' ) ); // Support for regular post/page comments

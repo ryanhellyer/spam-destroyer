@@ -19,6 +19,9 @@ class Spam_Destroyer_Options_Page {
 	 */
 	public function __construct() {
 
+		// Set the spam protection level
+		add_option( 'spam-killer-level', 'low' );
+
 		// Set the possible protection levels
 		$this->possible_levels = array(
 			'low'       => __( 'Low', 'spam-killer' ),
