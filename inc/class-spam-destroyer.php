@@ -30,7 +30,8 @@ class Spam_Destroyer {
 	public function __construct() {
 
 		// Set variables
-		$this->level = get_option( 'spam-killer-level' );
+		$this->level    = get_option( 'spam-killer-level' );
+		$this->spam_key = get_option( 'spam-killer-key' );
 
 		// Add filters
 		add_filter( 'preprocess_comment',                   array( $this, 'check_for_comment_evilness' ) ); // Support for regular post/page comments
@@ -40,7 +41,6 @@ class Spam_Destroyer {
 		add_filter( 'wpmu_validate_user_signup',            array( $this, 'check_for_post_evilness' ) ); // Support for multisite user signups
 
 		// Add to hooks
-		add_action( 'init',                                 array( $this, 'set_key' ), 1 );
 		add_action( 'comment_form_after_fields',            array( $this, 'non_js_captcha' ) ); // Show CAPTCHA for those with JavaScript turned off
 		add_action( 'comment_form',                         array( $this, 'extra_input_field' ) ); // WordPress comments page
 		add_action( 'signup_hidden_fields',                 array( $this, 'extra_input_field' ) ); // WordPress multi-site signup page
@@ -141,26 +141,6 @@ class Spam_Destroyer {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Set spam key
-	 * Needs set at init due to using nonces
-	 *
-	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
-	 * @since 1.0
-	 */
-	public function set_key() {
-
-		// Set key's string
-		if ( 'low' == $this->level ) {
-			$string = home_url(); // Use static key for low protection
-		} else {
-			$string = home_url() . wp_create_nonce( 'spam-killer' ); // Use nonce in key to force sporadic updates to the key
-		}
-
-		$this->spam_key = md5( $string );
 
 	}
 

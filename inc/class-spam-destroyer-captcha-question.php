@@ -12,10 +12,17 @@
 class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 
 	public $key; // The cache key
+	public $spam_key; // The spam protection key
 
+	/**
+	 * Class constructor
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.8
+	 */
 	public function __construct() {
 		$this->set_protection_settings();
-		$this->set_key();
+		$this->spam_key = get_option( 'spam-killer-key' );
 	}
 
 	/**

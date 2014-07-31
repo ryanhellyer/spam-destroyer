@@ -13,14 +13,16 @@
  */
 class Spam_Destroyer_Forced_CAPTCHA extends Spam_Destroyer {
 
+	public $spam_key; // The spam protection key
+
 	/**
-	 * Add filter
+	 * Class constructor
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.8
 	 */
 	public function __construct() {
-		add_action( 'init',                array( $this, 'set_key' ), 1 ); // Needed for decrypting the question
+		$this->spam_key = get_option( 'spam-killer-key' ); // Needed for decrypting the question
 		add_filter( 'spam_destroyed_here', array( $this, 'force_captcha' ) );
 	}
 

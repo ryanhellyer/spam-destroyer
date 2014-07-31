@@ -56,6 +56,7 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 	public $debug = false; // Debug?
 	public $im; // GD image
 	public $key; // The cache key
+	public $spam_key;
 
 	public function __construct() {
 
@@ -63,6 +64,8 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 		if ( ! isset( $_GET['captcha'] ) ) {
 			return;
 		}
+
+		$this->spam_key = get_option( 'spam-killer-key' );
 
 		$this->set_protection_settings();
 
@@ -74,7 +77,6 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 	 * Initialise image generation
 	 */
 	function init() {
-		$this->set_key();
 
 		// Grab image from cache
 		$this->key = md5( $_GET['captcha'] );

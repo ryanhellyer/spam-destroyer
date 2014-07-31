@@ -62,7 +62,8 @@ class Spam_Destroyer_Options_Page {
 	 * Init plugin options to white list our options
 	 */
 	public function register_settings(){
-		register_setting( 'spam-killer', 'spam-killer-level', array( $this, 'validate' ) );
+		register_setting( 'spam-killer', 'spam-killer-level', array( $this, 'validate_level' ) );
+		register_setting( 'spam-killer', 'spam-killer-key', array( $this, 'validate_key' ) );
 	}
 
 	/**
@@ -112,6 +113,15 @@ class Spam_Destroyer_Options_Page {
 						</td>
 					</tr>
 
+					<tr valign="top">
+						<th scope="row"><?php _e( 'Reset the spam protection key', 'spam-killer' ); ?></th>
+						<td>
+							<?php echo get_option( 'spam-killer-key' ); ?>
+							<input type="checkbox" id="spam-killer-key" name="spam-killer-key" />
+							<label class="description" for="spam-killer-key"><?php _e( 'You may need to refresh your page caches after resetting the spam protection key', 'spam-killer' ); ?></label>
+						</td>
+					</tr>
+
 				</table>
 
 				<p class="submit">
@@ -122,12 +132,12 @@ class Spam_Destroyer_Options_Page {
 	}
 
 	/**
-	 * Sanitize and validate input
+	 * Sanitize and validate protection level
 	 *
 	 * @param   string   $input   The spam protection level
 	 * @return  string or bool  Returns the santized spam protection level or false if input doesn't match expected values
 	 */
-	public function validate( $input ) {
+	public function validate_level( $input ) {
 		$output = false;
 
 		// Check input against all possible options
@@ -135,6 +145,24 @@ class Spam_Destroyer_Options_Page {
 			if ( $input == $value ) {
 				$output = $input;
 			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Validate and recreate key
+	 *
+	 * @param   string  $input   If input is 'on' then checkbox has been checked
+	 * @return  string  $output  The santized spam protection key
+	 */
+	public function validate_key( $input ) {
+
+		if ( 'on' == $input ) {
+			$number = home_url() . rand( 0, 999999 ); // User home_url() to make it unique and rand() to ensure some randomness in the output
+			$output = md5( $number ); // Use MD5 to ensure a consistent type of string
+		} else {
+			$output = get_option( 'spam-killer-key' ); // If checkbox not checked, then just output existing value
 		}
 
 		return $output;
