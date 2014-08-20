@@ -65,18 +65,15 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 			return;
 		}
 
-		$this->spam_key = get_option( 'spam-killer-key' );
-
+		parent::__construct();
 		$this->set_protection_settings();
-
-		// Fire init on 'init' to ensure that nonce's are available in time
-		add_action( 'init', array( $this, 'init' ) );
+		$this->init();
 	}
 
 	/*
 	 * Initialise image generation
 	 */
-	function init() {
+	public function init() {
 
 		// Grab image from cache
 		$this->key = md5( $_GET['captcha'] );

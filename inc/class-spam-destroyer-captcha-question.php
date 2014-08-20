@@ -21,6 +21,8 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	 * @since 1.8
 	 */
 	public function __construct() {
+		$this->set_keys(); // Set variables
+
 		$this->set_protection_settings();
 		$this->spam_key = get_option( 'spam-killer-key' );
 	}

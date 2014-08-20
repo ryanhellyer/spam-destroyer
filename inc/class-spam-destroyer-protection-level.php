@@ -16,13 +16,62 @@ class Spam_Destroyer_Protection_Level extends Spam_Destroyer {
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) ); // Add dashboard widget
 		add_action( 'spam_comment',       array( $this, 'spam_it' ) );
 		add_action( 'unspam_comment',     array( $this, 'unspam_it' ) );
+		add_action( 'init',     array( $this, 'get_spammed' ) );
 	}
+
+function get_spammed() {
+	if ( ! isset( $_GET['test'] ) ) {
+		return;
+	}
+
+	$args = array(
+		'status'     => 'spam',
+		'date_query' => array(
+			'after'     => date( 'F jS Y', get_option( 'spam-killer-check-date' ) ),
+			'before'    => 'tomorrow',
+			'inclusive' => true,
+		),
+	);
+	$comments = get_comments( $args );
+print_r( $comments );
+	$count = 0;
+	foreach( $comments as $key => $comment ) {
+		$issues = get_comment_meta( $comment->comment_ID, 'manual-spam', true );
+
+		if ( true == $issues ) {
+			$count++;
+		}
+
+	}
+
+	if ( 0 < $count ) {
+		$levels = array(
+			0 => 'low',
+			1 => 'medium',
+			2 => 'high',
+			3 => 'very-high',
+		);
+		foreach( $levels as $number => $level ) {
+			if ( $level == get_option( 'spam-killer-level' ) ) {
+				if ( isset( $levels[$number + 1] ) ) {
+					$new_level = $levels[$number + 1];
+				}
+			}
+		}
+
+		update_option( 'spam-killer-level', $new_level );
+		update_option( 'spam-killer-check-date', time() );
+	}
+
+	echo $count;
+	die;
+}
 
 	/**
 	 * For testing purposes only
 	 */
 	public function spam_it( $comment_id ) {
-		update_comment_meta( $comment_id, 'issues', 'Marked as spam' );
+		update_comment_meta( $comment_id, 'manual-spam', true );
 		return $comment_id;
 	}
 
@@ -30,7 +79,7 @@ class Spam_Destroyer_Protection_Level extends Spam_Destroyer {
 	 * For testing purposes only
 	 */
 	public function unspam_it( $comment_id ) {
-		update_comment_meta( $comment_id, 'issues', 'Removed from spam' );
+		update_comment_meta( $comment_id, 'manual-spam', false );
 		return $comment_id;
 	}
 

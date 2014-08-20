@@ -30,8 +30,7 @@ class Spam_Destroyer {
 	public function __construct() {
 
 		// Set variables
-		$this->level    = get_option( 'spam-killer-level' );
-		$this->spam_key = get_option( 'spam-killer-key' );
+		$this->set_keys();
 
 		// Add filters
 		add_filter( 'preprocess_comment',                   array( $this, 'check_for_comment_evilness' ) ); // Support for regular post/page comments
@@ -49,6 +48,17 @@ class Spam_Destroyer {
 		add_action( 'bbp_theme_before_reply_form_content',  array( $this, 'extra_input_field' ) ); // bbPress signup page
 		add_action( 'register_form',                        array( $this, 'extra_input_field' ) ); // bbPress user registration page
 
+	}
+
+	/**
+	 * Set various keys
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.8
+	 */
+	public function set_keys() {
+		$this->level    = get_option( 'spam-killer-level' );
+		$this->spam_key = get_option( 'spam-killer-key' );
 	}
 
 	/**

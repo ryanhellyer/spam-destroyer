@@ -22,6 +22,7 @@ class Spam_Destroyer_Forced_CAPTCHA extends Spam_Destroyer {
 	 * @since 1.8
 	 */
 	public function __construct() {
+		$this->set_keys(); // Set variables
 		$this->spam_key = get_option( 'spam-killer-key' ); // Needed for decrypting the question
 		add_filter( 'spam_destroyed_here', array( $this, 'force_captcha' ) );
 	}
