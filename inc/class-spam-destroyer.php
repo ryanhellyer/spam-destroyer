@@ -291,7 +291,7 @@ class Spam_Destroyer {
 			 * Process comments
 			 */
 
-			// If user answers CAPTCHA, then let them sail on through
+			// If user answers CAPTCHA, then let them sail on through (users on very high protection levels must pass other tests too)
 			if ( 'very-high' != $this->level && isset( $_POST['spam-killer-question'] ) ) {
 				$this->comment_issues[] = 'CAPTCHA question answered';
 
@@ -303,15 +303,16 @@ class Spam_Destroyer {
 
 				// Confirm question was answered recently
 				$this->check_time( $time, $comment );
-
-				$time = time() - $text[1];
-				if ( 10 < $time ) {
-					$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
+				$time = time() - $text[1]; // Number of seconds since CAPTCHA was generated
+				$time_limit = 60; // CAPTCHA must be answered in this number of seconds
+				if ( $time_limit < $time ) {
+					$this->kill_spam_dead( $comment ); // TOO SLOW! CAPTCHA wasn't answered within the alotted time and so they'll need to retry
 				}
 
+				// Did they answer it correctly?
 				$answer = $_POST['spam-killer-captcha'];
 				if ( $question == $answer && '' != $question ) {
-					return $comment;
+					return $comment; // w00p w00p! The CAPTCHA was answered correctly :)
 				}
 			}
 
