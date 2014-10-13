@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * THIS IS A WORK IN PROGRESS AND IS NOT CURRENTLY LOADED!
+ */
+
 /**
  * Setting protection level
  * 

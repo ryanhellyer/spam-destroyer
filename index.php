@@ -44,12 +44,12 @@ define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
 require( 'inc/class-spam-destroyer.php' );
 require( 'inc/class-spam-destroyer-generate-captcha.php' );
 require( 'inc/class-spam-destroyer-captcha-question.php' );
-require( 'inc/class-spam-destroyer-protection-level.php' );
 require( 'inc/class-spam-destroyer-black-list.php' );
 require( 'inc/class-spam-destroyer-forced-captcha.php' );
-require( 'inc/class-spam-destroyer-add-meta.php' );
 
 // Load admin panel only files
 if ( is_admin() ) {
+	require( 'inc/class-spam-destroyer-add-meta.php' );
 	require( 'inc/class-spam-destroyer-options-page.php' );
+	//require( 'inc/class-spam-destroyer-protection-level.php' );
 }

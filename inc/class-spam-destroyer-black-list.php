@@ -160,7 +160,7 @@ class Spam_Destroyer_Black_List extends Spam_Destroyer {
 
 		// Make sure we don't have double ups
 		$urls = array_unique( $urls );
-//Hello http://ryanhellyer.net/ there <a href="bla.com">BLA</a>, <a href="too.com">TOOT</a> and http://pooper.com/ too
+
 		return $urls;
 	}
 

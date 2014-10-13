@@ -165,7 +165,7 @@ class Spam_Destroyer {
 		// Load the payload
 		wp_enqueue_script(
 			'kill_it_dead',
-			SPAM_DESTROYER_URL . 'kill.js',
+			SPAM_DESTROYER_URL . 'assets/kill.js',
 			'',
 			'1.2',
 			true
