@@ -60,6 +60,23 @@ class Spam_Destroyer {
 	public function set_keys() {
 		$this->level    = get_option( 'spam-killer-level' );
 		$this->spam_key = get_option( 'spam-killer-key' );
+
+		// If no key set, then generate a one
+		if ( '' == $this->spam_key ) {
+			$key = $this->generate_new_key();
+			update_option( 'spam-killer-key', $key );
+		}
+	}
+
+	/*
+	 * Generate a new unique key
+	 * 
+	 * @return   string   A new spam key
+	 */
+	protected function generate_new_key() {
+		$number = home_url() . rand( 0, 999999 ); // User home_url() to make it unique and rand() to ensure some randomness in the output
+		$key = md5( $number ); // Use MD5 to ensure a consistent type of string
+		return $key;
 	}
 
 	/**

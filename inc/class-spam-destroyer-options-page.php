@@ -7,7 +7,7 @@
  * @author Ryan Hellyer <ryanhellyer@gmail.com>
  * @since 1.8
  */
-class Spam_Destroyer_Options_Page {
+class Spam_Destroyer_Options_Page extends Spam_Destroyer {
 
 	private $possible_levels;
 
@@ -116,9 +116,10 @@ class Spam_Destroyer_Options_Page {
 					<tr valign="top">
 						<th scope="row"><?php _e( 'Reset the spam protection key', 'spam-killer' ); ?></th>
 						<td>
-							<?php echo get_option( 'spam-killer-key' ); ?>
 							<input type="checkbox" id="spam-killer-key" name="spam-killer-key" />
 							<label class="description" for="spam-killer-key"><?php _e( 'You may need to refresh your page caches after resetting the spam protection key', 'spam-killer' ); ?></label>
+							<br />
+							<small><em>Current key: <?php echo esc_html( get_option( 'spam-killer-key' ) ); ?></em></small>
 						</td>
 					</tr>
 
@@ -159,8 +160,7 @@ class Spam_Destroyer_Options_Page {
 	public function validate_key( $input ) {
 
 		if ( 'on' == $input ) {
-			$number = home_url() . rand( 0, 999999 ); // User home_url() to make it unique and rand() to ensure some randomness in the output
-			$output = md5( $number ); // Use MD5 to ensure a consistent type of string
+			$output = $this->generate_new_key();
 		} else {
 			$output = get_option( 'spam-killer-key' ); // If checkbox not checked, then just output existing value
 		}
