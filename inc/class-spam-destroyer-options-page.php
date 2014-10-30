@@ -97,14 +97,7 @@ class Spam_Destroyer_Options_Page extends Spam_Destroyer {
 
 								// Output the various possible levels
 								foreach( $this->possible_levels as $value => $name ) {
-
-									if ( $value == get_option( 'spam-killer-level' ) ) {
-										$selected = 'selected="selected" ';
-									} else {
-										$selected = '';
-									}
-
-									echo '<option ' . $selected . 'value="' . esc_attr( $value ) . '">' . esc_html( $name ) . '</option>';
+									echo '<option ' . selected( $value, get_option( 'spam-killer-level' ) ) . 'value="' . esc_attr( $value ) . '">' . esc_html( $name ) . '</option>';
 								}
 
 								?>
