@@ -474,7 +474,7 @@ class Spam_Destroyer {
 		</form>
 		<script>
 			// Set the key as JS variable for use in the payload
-			var spam_destroyer = {"key":"' . $this->spam_key . '","lifetime":"' . absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) . '"};
+			var spam_destroyer = {"key":"' . esc_js( $this->spam_key ) . '","lifetime":"' . absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) . '"};
 		</script>
 		<script src="' . esc_url( SPAM_DESTROYER_URL . 'assets/kill.js' ) . '"></script>';
 
