@@ -9,6 +9,7 @@
  */
 class Spam_Destroyer {
 
+	public $version = '1.8';
 	public $spam_key; // Key used for confirmation of bot-like behaviour
 	public $speed = 5; // Will be killed as spam if posted faster than this
 	public $spam_days = 5; // How many days to keep spam around
@@ -167,7 +168,7 @@ class Spam_Destroyer {
 			'kill_it_dead',
 			SPAM_DESTROYER_URL . 'assets/kill.js',
 			'',
-			'1.2',
+			$this->version,
 			true
 		);
 
