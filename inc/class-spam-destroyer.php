@@ -322,7 +322,7 @@ class Spam_Destroyer {
 				// Confirm question was answered recently
 				$this->check_time( $time, $comment );
 				$time = time() - $text[1]; // Number of seconds since CAPTCHA was generated
-				$time_limit = 60; // CAPTCHA must be answered in this number of seconds
+				$time_limit = 300; // CAPTCHA must be answered in this number of seconds
 				if ( $time_limit < $time ) {
 					$this->kill_spam_dead( $comment ); // TOO SLOW! CAPTCHA wasn't answered within the alotted time and so they'll need to retry
 				}
@@ -331,6 +331,8 @@ class Spam_Destroyer {
 				$answer = $_POST['spam-killer-captcha'];
 				if ( $question == $answer && '' != $question ) {
 					return $comment; // w00p w00p! The CAPTCHA was answered correctly :)
+				} else {
+					$this->kill_spam_dead( $comment ); // SPLAT! Spam is killed, since it can't even answer a simple CAPTCHA!
 				}
 			}
 
