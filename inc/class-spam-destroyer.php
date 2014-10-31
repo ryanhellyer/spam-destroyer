@@ -12,13 +12,11 @@ class Spam_Destroyer {
 	public $version = '1.8';
 	public $spam_key; // Key used for confirmation of bot-like behaviour
 	public $speed = 5; // Will be killed as spam if posted faster than this
-	public $spam_days = 5; // How many days to keep spam around
-	public $first_deletion = 120; // How soon in seconds after activation should the first deletion be triggered
 	public $level; // Set spam protection level
 	public $encryption_method = 'AES-256-CBC'; // The encryption method used
 	public $min_word_length; // Min word length (for non-dictionary random text generation)
 	public $max_word_length; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
-	public $captcha_time_passed = 600; // Time limit on answering individual CAPTCHA questions
+	public $captcha_time_passed = HOUR_IN_SECONDS; // Time limit on answering individual CAPTCHA questions
 	public $comment_issues;
 
 	/**
