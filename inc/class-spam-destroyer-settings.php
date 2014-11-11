@@ -99,7 +99,7 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 		);
 		add_settings_field(
 			'spam-killer-level',
-			__( 'Select your spam protection level', 'spam-killer' ),
+			__( 'Protection level', 'spam-killer' ),
 			array( $this, 'spam_level_field' ),
 			'discussion',
 			'spam-killer',

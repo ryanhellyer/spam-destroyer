@@ -42,10 +42,13 @@ define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
 
 // Load front-end and admin panel files
 require( 'inc/class-spam-destroyer.php' );
-require( 'inc/class-spam-destroyer-generate-captcha.php' );
-require( 'inc/class-spam-destroyer-captcha-question.php' );
 require( 'inc/class-spam-destroyer-black-list.php' );
 require( 'inc/class-spam-destroyer-forced-captcha.php' );
+
+// Only load generate CAPTCHA class if appropriate GET request sent
+if ( isset( $_GET['captcha'] ) ) {
+	require( 'inc/class-spam-destroyer-generate-captcha.php' );
+}
 
 // Load admin panel only files
 if ( is_admin() ) {

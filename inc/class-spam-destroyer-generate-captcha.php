@@ -60,11 +60,6 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 
 	public function __construct() {
 
-		// If not loading a captcha, then bail out now
-		if ( ! isset( $_GET['captcha'] ) ) {
-			return;
-		}
-
 		parent::__construct();
 		$this->set_protection_settings();
 		$this->init();

@@ -72,7 +72,7 @@ class Spam_Destroyer {
 	 * @return   string   A new spam key
 	 */
 	protected function generate_new_key() {
-		$number = home_url() . rand( 0, 999999 ); // User home_url() to make it unique and rand() to ensure some randomness in the output
+		$number = home_url() . rand( 0, 999999 ); // Use home_url() to make it unique and rand() to ensure some randomness in the output
 		$key = md5( $number ); // Use MD5 to ensure a consistent type of string
 		return $key;
 	}
@@ -205,6 +205,9 @@ class Spam_Destroyer {
 	 * @since 1.7
 	 */
 	public function non_js_captcha() {
+
+		// Grab CAPTCHA question
+		require( SPAM_DESTROYER_DIR . '/inc/class-spam-destroyer-captcha-question.php' );
 		$captcha = new Spam_Destroyer_CAPTCHA_Question();
 
 		if ( 'very-high' != $this->level ) {
@@ -390,16 +393,16 @@ class Spam_Destroyer {
 	public function check_for_post_evilness( $result ) {
 
 		// If the user is logged in, then they're clearly trusted, so continue without checking
-		if ( is_user_logged_in() )
+		if ( is_user_logged_in() ) {
 			return $comment;
+		}
 
 		// Check the hidden input field against the key
 		if ( $_POST['killer_value'] != $this->spam_key ) {
 			// BAM! And the spam signup is dead :)
 			if ( isset( $_POST['bbp_topic_id'] ) ) {
 				bbp_add_error('bbp_reply_content', __('Sorry, but you have been detected as spam', 'spam-destroyer' ) );
-			}
-			else {
+			} else {
 				$result['errors']->add( 'blogname', '' );
 			}
 		}
@@ -457,6 +460,7 @@ class Spam_Destroyer {
 		 * Let's give them one less chance to prove they're human :)
 		 * This is necessary to allow JavaScript or Cookie'less users to comment.
 		 */
+		require( SPAM_DESTROYER_DIR . '/inc/class-spam-destroyer-captcha-question.php' );
 		$captcha = new Spam_Destroyer_CAPTCHA_Question();
 		$question = $captcha->get_encrypted_question();
 
