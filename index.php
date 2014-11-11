@@ -50,6 +50,6 @@ require( 'inc/class-spam-destroyer-forced-captcha.php' );
 // Load admin panel only files
 if ( is_admin() ) {
 	require( 'inc/class-spam-destroyer-add-meta.php' );
-	require( 'inc/class-spam-destroyer-options-page.php' );
+	require( 'inc/class-spam-destroyer-settings.php' );
 	//require( 'inc/class-spam-destroyer-protection-level.php' );
 }
