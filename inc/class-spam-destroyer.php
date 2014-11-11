@@ -9,7 +9,7 @@
  */
 class Spam_Destroyer {
 
-	public $version = '1.8';
+	public $version = '1.8.1';
 	public $spam_key; // Key used for confirmation of bot-like behaviour
 	public $speed = 5; // Will be killed as spam if posted faster than this
 	public $level; // Set spam protection level

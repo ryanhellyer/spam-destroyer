@@ -1,8 +1,8 @@
 === Spam Destroyer ===
 Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman, forsite
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
-Tags: spam, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate
-Requires at least: 3.9
+Tags: spam, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate
+Requires at least: 4.0
 Stable tag: 1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,7 +34,14 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 == Changelog ==
 
-1.8
+1.8.1 (11/11/2014)
+= Moved settings to discussions page
+= Reduced text string length
+= Improved performance via selective loading of PHP files
+= Improved documentation
+= Improved and additional links on plugins page
+
+1.8 (1/11/2014)
 = Addition of black-list for higher spam settings
 = Implemented time-limit for answering CAPTCHA questions
 = Moved to a modular system for handling extra protective levels
