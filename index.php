@@ -56,5 +56,5 @@ if ( isset( $_GET['captcha'] ) ) {
 // Load admin panel only files
 if ( is_admin() ) {
 	require( 'inc/class-spam-destroyer-settings.php' );
-	//require( 'inc/class-spam-destroyer-protection-level.php' );
+	require( 'modules/class-spam-destroyer-protection-level.php' );
 }

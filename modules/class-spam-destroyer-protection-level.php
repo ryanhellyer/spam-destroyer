@@ -17,12 +17,14 @@ class Spam_Destroyer_Protection_Level extends Spam_Destroyer {
 	 * Class constructor
 	 */
 	public function __construct() {
-		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) ); // Add dashboard widget
+
+		$this->comment_issues['manual-spam'] = __( 'Manual spam', 'spam-killer' ); // Translation for comment being marked as spam
+
 		add_action( 'spam_comment',       array( $this, 'spam_it' ) );
 		add_action( 'unspam_comment',     array( $this, 'unspam_it' ) );
-		add_action( 'init',     array( $this, 'get_spammed' ) );
+//		add_action( 'init',               array( $this, 'get_spammed' ) );
 	}
-
+/*
 function get_spammed() {
 	if ( ! isset( $_GET['test'] ) ) {
 		return;
@@ -70,12 +72,35 @@ print_r( $comments );
 	echo $count;
 	die;
 }
+*/
 
 	/**
 	 * For testing purposes only
+	 *
+	 * @param    int   $comment_id  The comments ID
+	 * @return   int   The comments ID
 	 */
 	public function spam_it( $comment_id ) {
-		update_comment_meta( $comment_id, 'manual-spam', true );
+
+		// Load the parent constructor so that we can access $protection_levels
+		parent::__construct();
+
+		$current_level = get_option( 'spam-killer-level' );
+		foreach( $this->protection_levels as $key => $level ) {
+			if ( $level == $current_level ) {
+
+				/************ HERE WE NEED TO CHECK HOW RECENTLY THE LAST SPAM WAS **************/
+
+				// Bump the protection level up a notch
+				$key++; // Bump the key up a notch (corresponding to a higher protection level)
+				if ( isset( $this->protection_levels[$key] ) ) {
+					$new_level = $this->protection_levels[$key];
+					update_option( 'spam-killer-level', $new_level );
+				}
+			}
+		}
+
+		update_comment_meta( $comment_id, 'issues', 'manual-spam' );
 		return $comment_id;
 	}
 
@@ -87,9 +112,11 @@ print_r( $comments );
 		return $comment_id;
 	}
 
-	/*
-	 * Add the dashboard widget
-	 */
+}
+new Spam_Destroyer_Protection_Level;
+
+/*
+	add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) ); // Add dashboard widget
 	public function add_dashboard_widget() {
 		wp_add_dashboard_widget(
 			'dashboard_spam_destroyer',
@@ -97,15 +124,9 @@ print_r( $comments );
 			array( $this, 'dashboard_widget' )
 		);
 	}
-
-	/*
-	 * The dashboard widget content
-	 */
 	public function dashboard_widget() {
 		echo '<p>';
 		echo sprintf( __( 'Spam Destroyer is current at the %s protection leve ', 'spam-destroyer' ), $this->level ) . ' ';
 		echo '</p>';
 	}
-
-}
-new Spam_Destroyer_Protection_Level;
+*/

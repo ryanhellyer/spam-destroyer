@@ -18,6 +18,7 @@ class Spam_Destroyer {
 	public $max_word_length; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
 	public $captcha_time_passed = HOUR_IN_SECONDS; // Time limit on answering individual CAPTCHA questions
 	protected $comment_issues; // Reasons for comments being marked as spam
+	protected $protection_levels; // The different levels of protection
 
 	/**
 	 * Preparing to launch the almighty spam attack!
@@ -36,6 +37,14 @@ class Spam_Destroyer {
 			'hidden-field-not-set' => __( 'Hidden input field not set', 'spam-killer' ),
 			'wrong-timestamp'      => __( 'Time not set correctly', 'spam-killer' ),
 			'captcha-wrong'        => __( 'CAPTCHA not answered correctly', 'spam-killer' ),
+		);
+
+		// Set possible levels
+		$this->protection_levels = array(
+			0 => 'low',
+			1 => 'medium',
+			2 => 'high',
+			3 => 'very-high',
 		);
 
 		// Add filters
