@@ -18,6 +18,8 @@ class Spam_Destroyer_Black_List extends Spam_Destroyer {
 	 * @since 1.8
 	 */
 	public function __construct() {
+
+		$this->comment_issues['naughty-word-used'] = __( 'Disallowed word used', 'spam-killer' ); // Translation for comment being marked as spam
 		$this->set_keys(); // Set variables
 
 		add_filter( 'spam_destroyed_here', array( $this, 'naughty_comment_fields' ), 19 );
@@ -58,7 +60,7 @@ class Spam_Destroyer_Black_List extends Spam_Destroyer {
 					strpos( $comment['comment_author_url']  , $banned_string ) !== false ||
 					strpos( $comment['comment_content']     , $banned_string ) !== false
 				) {
-					$comment['failed'][] = 'Naughty word used';
+					$this->comment_issue = 'naughty-word-used';
 					$this->kill_spam_dead( $comment ); // Death to those who use NAUGHTY WORDS!
 				}
 			}

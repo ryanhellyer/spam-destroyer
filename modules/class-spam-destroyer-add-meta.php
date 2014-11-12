@@ -82,7 +82,15 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 			return;
 		}
 
-		echo esc_attr( get_comment_meta( $id, 'issues', true ) );
+		// Need to call parent constructor here to access the $comment_issues variable
+		parent::__construct();
+
+		// Output the issue into the column
+		$issue = get_comment_meta( $id, 'issues', true );
+		if ( isset( $this->comment_issues[$issue] ) ) {
+			echo esc_attr( $this->comment_issues[$issue] );
+		}
+
 	}
 
 }

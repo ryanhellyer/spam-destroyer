@@ -17,7 +17,7 @@ class Spam_Destroyer {
 	public $min_word_length; // Min word length (for non-dictionary random text generation)
 	public $max_word_length; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
 	public $captcha_time_passed = HOUR_IN_SECONDS; // Time limit on answering individual CAPTCHA questions
-	public $comment_issues;
+	protected $comment_issues; // Reasons for comments being marked as spam
 
 	/**
 	 * Preparing to launch the almighty spam attack!
@@ -30,6 +30,13 @@ class Spam_Destroyer {
 
 		// Set variables
 		$this->set_keys();
+
+		// Possible comment issues
+		$this->comment_issues = array(
+			'hidden-field-not-set' => __( 'Hidden input field not set', 'spam-killer' ),
+			'wrong-timestamp'      => __( 'Time not set correctly', 'spam-killer' ),
+			'captcha-wrong'        => __( 'CAPTCHA not answered correctly', 'spam-killer' ),
+		);
 
 		// Add filters
 		add_filter( 'preprocess_comment',                   array( $this, 'check_for_comment_evilness' ) ); // Support for regular post/page comments
@@ -54,8 +61,9 @@ class Spam_Destroyer {
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.8
+	 * @access   protected
 	 */
-	public function set_keys() {
+	protected function set_keys() {
 		$this->level    = get_option( 'spam-killer-level' );
 		$this->spam_key = get_option( 'spam-killer-key' );
 
@@ -66,9 +74,12 @@ class Spam_Destroyer {
 		}
 	}
 
-	/*
+	/**
 	 * Generate a new unique key
-	 * 
+	 *
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.8
+	 * @access   protected
 	 * @return   string   A new spam key
 	 */
 	protected function generate_new_key() {
@@ -312,9 +323,8 @@ class Spam_Destroyer {
 
 			// If user answers CAPTCHA, then let them sail on through (users on very high protection levels must pass other tests too)
 			if ( 'very-high' != $this->level && isset( $_POST['spam-killer-question'] ) ) {
-				$this->comment_issues[] = 'CAPTCHA question answered';
 
-				// Grab question
+				// Extra question and time stamp from encrypted blob
 				$text = $this->decrypt( $_POST['spam-killer-question'] );
 				$text = explode( '|||', $text );
 				$question = $text[0];
@@ -339,7 +349,7 @@ class Spam_Destroyer {
 
 			// Check the hidden input field against the key
 			if ( $_POST['killer_value'] != $this->spam_key ) {
-				$this->comment_issues[] = 'Hidden input field not set';
+				$this->comment_issue = 'hidden-field-not-set';
 				$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
 			}
 
@@ -348,7 +358,7 @@ class Spam_Destroyer {
 
 				// If time not set correctly, then assume it's spam
 				if ( $_COOKIE[$this->spam_key] > 1 && ( ( time() - $_COOKIE[$this->spam_key] ) < $this->speed ) ) {
-					$this->comment_issues[] = 'Time not set correctly';
+					$this->comment_issue = 'wrong-timestamp';
 					$this->kill_spam_dead( $comment ); // Something's up, since the commenters cookie time frame doesn't match ours
 				}
 
@@ -360,8 +370,6 @@ class Spam_Destroyer {
 			$comment = apply_filters( 'spam_destroyed_here', $comment );
 
 		}
-
-		$this->comment_issues[] = 'Passed!';
 
 		// YAY! It's a miracle! Something actually got listed as a legit comment :) W00P W00P!!!
 		return $comment;
@@ -484,11 +492,23 @@ class Spam_Destroyer {
 					<input type="hidden" name="comment_parent" id="comment_parent" value="' . esc_attr( $comment['comment_parent'] ) . '" />
 				</p>';
 
-		if ( isset( $comment['failed'] ) ) {
-			$failed = $comment['failed'][0];
-			$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-killer' ) . ' ' . esc_html( $failed ) . '\');">' . __( 'Why do I need to answer this?', 'spam-killer' ) . '</a></p>';
-			$error .= '<input id="failed" name="failed" type="hidden" value="' . esc_attr( $failed ) . '" />';
-			$error .= '<input id="comment_karma" name="comment_karma" type="hidden" value="' . esc_attr( $failed ) . '" />';
+		// Display reason for comment being caught as spam - hidden field is used on backend to store comment meta for later analysis
+		if ( isset( $this->comment_issue ) || isset( $_POST['failed'] ) ) {
+
+			// Grab issue
+			if ( isset( $this->comment_issue ) ) {
+				$issue_raw = $this->comment_issue; // The raw issue as provided by comment form
+			} else {
+				$issue_raw = 'captcha-wrong'; // They failed the CAPTCHA, so we'll change the issue
+			}
+
+			if ( isset( $this->comment_issues[$issue_raw] ) ) {
+				$issue_human_readable = $this->comment_issues[$issue_raw]; // Convert to human readable format
+
+				$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-killer' ) . ' ' . esc_html( $issue_human_readable ) . '\');">' . __( 'Why do I need to answer this?', 'spam-killer' ) . '</a></p>';
+				$error .= '<input id="failed" name="failed" type="hidden" value="' . esc_attr( $issue_raw ) . '" />';
+				$error .= '<input id="comment_karma" name="comment_karma" type="hidden" value="' . esc_attr( $issue_raw ) . '" />';
+			}
 		}
 
 		$error .= '

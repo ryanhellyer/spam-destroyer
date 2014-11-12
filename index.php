@@ -40,10 +40,13 @@ license.txt file included with this plugin for more information.
 define( 'SPAM_DESTROYER_DIR', dirname( __FILE__ ) );
 define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
 
-// Load front-end and admin panel files
+// Load the bare minimum for the front-end
 require( 'inc/class-spam-destroyer.php' );
-require( 'inc/class-spam-destroyer-black-list.php' );
-require( 'inc/class-spam-destroyer-forced-captcha.php' );
+
+// Load extra modules - provides extra protection when required
+require( 'modules/class-spam-destroyer-black-list.php' );
+require( 'modules/class-spam-destroyer-forced-captcha.php' );
+require( 'modules/class-spam-destroyer-add-meta.php' );
 
 // Only load generate CAPTCHA class if appropriate GET request sent
 if ( isset( $_GET['captcha'] ) ) {
@@ -52,7 +55,6 @@ if ( isset( $_GET['captcha'] ) ) {
 
 // Load admin panel only files
 if ( is_admin() ) {
-	require( 'inc/class-spam-destroyer-add-meta.php' );
 	require( 'inc/class-spam-destroyer-settings.php' );
 	//require( 'inc/class-spam-destroyer-protection-level.php' );
 }

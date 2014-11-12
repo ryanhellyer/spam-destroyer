@@ -52,7 +52,7 @@ class Spam_Destroyer_Forced_CAPTCHA extends Spam_Destroyer {
 
 		$answer = $_POST['spam-killer-captcha'];
 		if ( $question != $answer || '' == $question ) {
-			$this->comment_issues[] = 'CAPTCHA not answered correctly on very high level';
+			$this->comment_issue = 'captcha-wrong';
 			$this->kill_spam_dead( $comment ); // Ohhhh! Cookie not set, so killing the little dick before it gets through!
 		}
 
