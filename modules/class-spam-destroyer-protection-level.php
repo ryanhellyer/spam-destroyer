@@ -14,7 +14,7 @@
 class Spam_Destroyer_Protection_Level extends Spam_Destroyer {
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 */
 	public function __construct() {
 
@@ -22,60 +22,68 @@ class Spam_Destroyer_Protection_Level extends Spam_Destroyer {
 
 		add_action( 'spam_comment',       array( $this, 'spam_it' ) );
 		add_action( 'unspam_comment',     array( $this, 'unspam_it' ) );
-//		add_action( 'init',               array( $this, 'get_spammed' ) );
-	}
-/*
-function get_spammed() {
-	if ( ! isset( $_GET['test'] ) ) {
-		return;
-	}
-
-	$args = array(
-		'status'     => 'spam',
-		'date_query' => array(
-			'after'     => date( 'F jS Y', get_option( 'spam-killer-check-date' ) ),
-			'before'    => 'tomorrow',
-			'inclusive' => true,
-		),
-	);
-	$comments = get_comments( $args );
-print_r( $comments );
-	$count = 0;
-	foreach( $comments as $key => $comment ) {
-		$issues = get_comment_meta( $comment->comment_ID, 'manual-spam', true );
-
-		if ( true == $issues ) {
-			$count++;
-		}
+		add_action( 'admin_notices',      array( $this, 'admin_notice' ) );
 
 	}
 
-	if ( 0 < $count ) {
-		$levels = array(
-			0 => 'low',
-			1 => 'medium',
-			2 => 'high',
-			3 => 'very-high',
-		);
-		foreach( $levels as $number => $level ) {
-			if ( $level == get_option( 'spam-killer-level' ) ) {
-				if ( isset( $levels[$number + 1] ) ) {
-					$new_level = $levels[$number + 1];
-				}
+	/**
+	 * Admin notice.
+	 * Prompts user to increase or decrease spam protectoin level.
+	 */
+	public function admin_notice() {
+		?>
+
+		<script>
+		function spam_killer_show_hide(elementid){
+			if (document.getElementById(elementid).style.display == 'none'){
+				document.getElementById(elementid).style.display = '';
+			} else {
+				document.getElementById(elementid).style.display = 'none';
 			}
 		}
 
-		update_option( 'spam-killer-level', $new_level );
-		update_option( 'spam-killer-check-date', time() );
+		</script>
+
+		<div class="updated">
+			<p><strong><?php _e( 'Increase spam protection level?', 'spam-killer' ); ?></strong></p>
+			<p><?php _e( 'We have noticed you reported spam recently. Would you like us to increase your spam protection level?', 'spam-killer' ); ?></p>
+			<p>
+				<a href="#" class="button button-primary">Yes please</a>
+				 &nbsp; 
+				<a href="#" class="button">No thanks</a>
+				 &nbsp; 
+				<small><a href="javascript:spam_killer_show_hide('spam-protection-level-info');">More information</a></small>
+
+				<div id="spam-protection-level-info" style="display:none;margin:1rem 0;">
+					Increasing your spam protection level also increases the chance of real human commenters being detected as spam.
+
+					<form method="post" action="options.php">
+						<p>
+							<label for="spam-killer">Protection level</label>
+							<select id="spam-killer-level" for="spam-killer" name="spam-killer-level">
+								<option  selected='selected'value="low">Low</option>
+								<option value="medium">Medium</option>
+								<option value="high">High</option>
+								<option value="very-high">Very high</option>
+							</select>
+						</p>
+						<p>
+							<label for="spam-killer">Reset anti-spam key</label>
+							<input type="checkbox" id="spam-killer-key" name="spam-killer-key" />
+							<small><em>Current key: eb8bc64920c2411e17494cdfe0aae07f</em></small>
+						</p>
+						<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"  /></p>
+					</form>
+
+				</div>
+
+			</p>
+		</div>
+		<?php
 	}
 
-	echo $count;
-	die;
-}
-*/
-
 	/**
-	 * For testing purposes only
+	 * Fired when the user marks a comment as spam.
 	 *
 	 * @param    int   $comment_id  The comments ID
 	 * @return   int   The comments ID
@@ -89,18 +97,57 @@ print_r( $comments );
 		foreach( $this->protection_levels as $key => $level ) {
 			if ( $level == $current_level ) {
 
-				/************ HERE WE NEED TO CHECK HOW RECENTLY THE LAST SPAM WAS **************/
+/**
+ ***********************************************
+ ***********************************************
+ *
+ * BETTER IF PUTS INTO NOTIFICATION BOX IN ADMIN
+ * THEN ASKS USER TO CONFIRM IF PROTECTION LEVEL
+ * SHOULD CHANGE.
+ *
+ * SAME BOX WOULD APPEAR WHEN CRON CONFIRMS THAT
+ * NO SPAM FOR A WHILE, THEREFORE SHOULD DROP
+ * PROTECTION LEVEL BACK DOWN.
+ * 
+ ***********************************************
+ ***********************************************
+ */
+//update_option( 'spam-killer-check-date', time() - (30*24*60*60) );
 
-				// Bump the protection level up a notch
-				$key++; // Bump the key up a notch (corresponding to a higher protection level)
-				if ( isset( $this->protection_levels[$key] ) ) {
-					$new_level = $this->protection_levels[$key];
-					update_option( 'spam-killer-level', $new_level );
+				// Last check date
+				if ( '' == get_option( 'spam-killer-check-date' ) ) {
+					$last_check_date = time() - ( 30 * 24 * 60 * 60 );
+				} else {
+					$last_check_date = get_option( 'spam-killer-check-date' );
 				}
+
+				// Check for recent spam comments
+				$args = array(
+					'status'     => 'spam',
+					'date_query' => array(
+						'after'     => date( 'F jS Y', $last_check_date ), // Set how long ago to check for comments back
+						'before'    => 'tomorrow',
+						'inclusive' => true,
+					),
+				);
+				$comments = get_comments( $args );
+				// Only bump protection level if there have been other recent spam comments
+				if ( 1 < count( $comments ) ) {
+
+					// Bump the protection level up a notch
+					$key++; // Bump the key up a notch (corresponding to a higher protection level)
+					if ( isset( $this->protection_levels[$key] ) ) {
+						$new_level = $this->protection_levels[$key];
+						update_option( 'spam-killer-level', $new_level ); // Update spam protection level
+						update_option( 'spam-killer-check-date', time() ); // Update check date
+						update_comment_meta( $comment_id, 'issues', 'manual-spam' );
+					}
+
+				}
+
 			}
 		}
 
-		update_comment_meta( $comment_id, 'issues', 'manual-spam' );
 		return $comment_id;
 	}
 
