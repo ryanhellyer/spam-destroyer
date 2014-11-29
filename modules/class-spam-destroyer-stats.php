@@ -68,10 +68,11 @@ class Spam_Destroyer_Stats {
 	 */
 	public function modify_frequency() {
 
-		// Stashing historical data
-		$history = get_option( 'spam-killer-historical-stats' );
+		// Stashing historical data (key of array is the number of days since epoch)
+		$history = get_option( 'spam-killer-historical-stats' ); // Grab the array of stats
 		$days_since_epoch = absint( time() / DAY_IN_SECONDS ); // The number of days since epoch
-		$history[$days_since_epoch] = get_option( 'spam-killer-recent-stats' );
+		$history[$days_since_epoch] = get_option( 'spam-killer-recent-stats' ); // Stick recent stats into history
+		update_option( 'spam-killer-historical-stats', $history ); // Store history
 
 		// Modifying frequency based on recent history
 		$frequency = ( $history[$days_since_epoch] / ( 6 * 24 ) ); // Attempt to record a spam hit once per 10 minute block (estimated)
