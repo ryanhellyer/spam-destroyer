@@ -47,6 +47,7 @@ require( 'inc/class-spam-destroyer.php' );
 require( 'modules/class-spam-destroyer-black-list.php' );
 require( 'modules/class-spam-destroyer-forced-captcha.php' );
 require( 'modules/class-spam-destroyer-add-meta.php' );
+require( 'modules/class-spam-destroyer-stats.php' );
 
 // Only load generate CAPTCHA class if appropriate GET request sent
 if ( isset( $_GET['captcha'] ) ) {

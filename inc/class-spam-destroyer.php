@@ -473,6 +473,9 @@ class Spam_Destroyer {
 	 */
 	public function kill_spam_dead( $comment ) {
 
+		// Adding hook for tracking killed spams
+		do_action( 'spam_destroyer_death' );
+
 		/*
 		 * Let's give them one less chance to prove they're human :)
 		 * This is necessary to allow JavaScript or Cookie'less users to comment.

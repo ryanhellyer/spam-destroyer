@@ -10,9 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Remove options
-remove_option( 'spam-killer-stats' );
-remove_option( 'spam-killer-level' );
+delete_option( 'spam-killer-level' );
+delete_option( 'spam-killer-frequency-stats' );
+delete_option( 'spam-killer-recent-stats' );
+delete_option( 'spam-killer-historical-stats' );
 
 // Remove network wide options
-remove_site_option( 'spam-killer-comments-blacklist' );
-remove_site_option( 'spam-killer-url-blacklist' );
+delete_site_option( 'spam-killer-comments-blacklist' );
+delete_site_option( 'spam-killer-url-blacklist' );

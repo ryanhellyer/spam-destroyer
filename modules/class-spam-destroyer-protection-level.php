@@ -17,7 +17,7 @@ class Spam_Destroyer_Protection_Level extends Spam_Destroyer {
 	 * Class constructor.
 	 */
 	public function __construct() {
-
+return;
 		$this->comment_issues['manual-spam'] = __( 'Manual spam', 'spam-killer' ); // Translation for comment being marked as spam
 
 		add_action( 'spam_comment',       array( $this, 'spam_it' ) );
