@@ -499,7 +499,7 @@ class Spam_Destroyer {
 				</div>
 
 				<p class="form-submit">
-					<input name="submit" type="submit" id="submit" value="' . __( 'Submit answer' ) . '" />
+					<input name="submit" type="submit" id="submit" value="' . esc_attr( __( 'Submit answer' ) ) . '" />
 					<input type="hidden" name="comment_post_ID" value="' . esc_attr( $comment['comment_post_ID'] ) . '" id="comment_post_ID" />
 					<input type="hidden" name="comment_parent" id="comment_parent" value="' . esc_attr( $comment['comment_parent'] ) . '" />
 				</p>';
