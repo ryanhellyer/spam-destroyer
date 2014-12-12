@@ -10,7 +10,7 @@ Author URI: http://geek.ryanhellyer.net/
 Copyright (c) 2014 Ryan Hellyer
 
 
-Based on the following open source projects ...
+Based on the following open source project:
 
 Cookies for Comments by Donncha O Caoimh
 http://ocaoimh.ie/cookies-for-comments/
@@ -59,3 +59,4 @@ if ( is_admin() ) {
 	require( 'inc/class-spam-destroyer-settings.php' );
 	require( 'modules/class-spam-destroyer-protection-level.php' );
 }
+
