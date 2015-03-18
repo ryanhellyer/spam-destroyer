@@ -45,12 +45,13 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 	 * @param  object   $commentdata   The comment object
 	 */
 	public function add_issues_to_comment_meta( $id, $commentdata ) {
-
+//echo 'xxxxx';die;
 		// And now to actually save the data :)
 		if ( isset( $_POST['failed'] ) ) {
 			$failed = wp_kses_post( $_POST['failed'] );
 			update_comment_meta( $id, 'issues', $failed );
 		}
+//echo $_POST['failed'];die;
 
 	}
 

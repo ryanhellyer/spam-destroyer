@@ -54,6 +54,10 @@ class Spam_Destroyer {
 		add_filter( 'wpmu_validate_blog_signup',            array( $this, 'check_for_post_evilness' ) ); // Support for multisite site signups
 		add_filter( 'wpmu_validate_user_signup',            array( $this, 'check_for_post_evilness' ) ); // Support for multisite user signups
 
+		// JetPack - under development
+		add_filter( 'antispam-check',                       array( $this, 'check_for_contact_form_evilness' ) ); // WordPress comments page
+		add_filter( 'antispam-fields',                      array( $this, 'get_extra_input_field' ) ); // WordPress comments page
+
 		// Add to hooks
 		add_action( 'comment_form_after_fields',            array( $this, 'non_js_captcha' ) ); // Show CAPTCHA for those with JavaScript turned off
 		add_action( 'comment_form',                         array( $this, 'extra_input_field' ) ); // WordPress comments page
@@ -253,9 +257,6 @@ class Spam_Destroyer {
 
 		echo $this->get_extra_input_field();
 
-		// Enqueue the payload - placed here so that it is ONLY used when on a page utilizing the plugin
-		$this->load_payload();
-
 	}
 
 	/**
@@ -263,10 +264,35 @@ class Spam_Destroyer {
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.0
+	 * @param   string   $string   Rarely used, but useful for when needing to use as filter in another plugin, instead of a hook
 	 */
-	public function get_extra_input_field() {
-		$field = '<input type="hidden" id="killer_value" name="killer_value" value="' . md5( rand( 0, 999 ) ) . '"/>';
+	public function get_extra_input_field( $string = '' ) {
+
+		// Enqueue the payload - placed here so that it is ONLY used when on a page utilizing the plugin
+		$this->load_payload();
+
+		$field = $string . '<input type="hidden" id="killer_value" name="killer_value" value="' . md5( rand( 0, 999 ) ) . '"/>';
 		return $field;
+	}
+
+	/**
+	 * Boom! No more contact form spam!
+	 * 
+	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
+	 * @since 1.0
+	 */
+	public function check_for_contact_form_evilness() {
+
+		// If the user is logged in, then they're clearly trusted, so continue without checking
+		if ( is_user_logged_in() ) {
+			return;
+		}
+
+		// Check the hidden input field against the key
+		if ( $_POST['killer_value'] != $this->spam_key ) {
+			wp_die( 'Sorry, but you failed out anti-spam test. If you believe this to be in error, please get in touch ... https://ryan.hellyer.kiwi/contact/' );
+		}
+
 	}
 
 	/**
