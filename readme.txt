@@ -3,7 +3,7 @@ Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman, forsite
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
 Tags: spam, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate
 Requires at least: 4.0
-Stable tag: 1.8
+Stable tag: 1.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,8 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 == Changelog ==
 
+1.8.2 (21/3/2015)
+= Fixed bug which triggered legit comments to be detected as spam due to commenting too quickly. Time limit was adjusted from five seconds to two seconds to fix this.
 1.8.1 (11/11/2014)
 = Moved settings to discussions page
 = Reduced text string length

@@ -9,9 +9,9 @@
  */
 class Spam_Destroyer {
 
-	public $version = '1.8.1';
+	public $version = '1.8.2';
 	public $spam_key; // Key used for confirmation of bot-like behaviour
-	public $speed = 5; // Will be killed as spam if posted faster than this
+	public $speed = 2; // Will be killed as spam if posted faster than this
 	public $level; // Set spam protection level
 	public $encryption_method = 'AES-256-CBC'; // The encryption method used
 	public $min_word_length; // Min word length (for non-dictionary random text generation)
