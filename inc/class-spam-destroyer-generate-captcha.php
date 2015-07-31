@@ -64,7 +64,7 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 		$this->init();
 	}
 
-	/*
+	/**
 	 * Initialise image generation.
 	 */
 	public function init() {
@@ -157,7 +157,7 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 	}
 
 	/**
-	 * Horizontal line insertion
+	 * Horizontal line insertion.
 	 */
 	protected function write_line() {
 

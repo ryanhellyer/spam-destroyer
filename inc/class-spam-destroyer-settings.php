@@ -11,6 +11,8 @@
  */
 class Spam_Destroyer_Settings extends Spam_Destroyer {
 
+	public $nonce = 'spam-destroyer';
+
 	/**
 	 * Fire the constructor up :)
 	 */
@@ -26,7 +28,7 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 	public function key_change_notice() {
 		echo '
 		<div class="updated">
-			<p>' . __( 'The Spam Destroyer key has been reset.', 'spam-killer' ) . '</p>
+			<p>' . __( 'The Spam Destroyer key has been reset.', 'spam-destroyer' ) . '</p>
 		</div>';
 	}
 
@@ -50,8 +52,8 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 		// Add the spam key reset link
 		$plugin_meta[] = sprintf( 
 			'<a href="%s">%s</a>',
-			wp_nonce_url( admin_url( 'plugins.php?reset_spam_key=true' ), 'spam-killer' ), 
-			__( 'Reset spam key', 'spam-killer' ) 
+			wp_nonce_url( admin_url( 'plugins.php?reset_spam_key=true' ), $this->nonce ), 
+			__( 'Reset spam key', 'spam-destroyer' ) 
 		);
 
 		// Add the plugin page link
@@ -65,7 +67,7 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 		$plugin_meta[] = sprintf( 
 			'<a href="%s">%s</a>',
 			'https://geek.hellyer.kiwi/donations/', 
-			__( 'Donate', 'spam-killer' ) 
+			__( 'Donate', 'spam-destroyer' ) 
 		);
 
 		return $plugin_meta;
@@ -78,7 +80,7 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 
 		// Bail out if not on correct page
 		if (
-//			! check_admin_referer( 'spam-killer' )
+//			! check_admin_referer( $this->nonce )
 //			||
 			! is_admin()
 			||

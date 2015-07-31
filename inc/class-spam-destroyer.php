@@ -20,7 +20,7 @@ class Spam_Destroyer {
 	public $max_word_length;                       // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
 	public $captcha_time_passed = HOUR_IN_SECONDS; // Time limit on answering individual CAPTCHA questions
 	public $time_limit = 300;                      // CAPTCHA must be answered in this number of seconds
-	public $spam_key_option = 'spam-killer-key'    // The anti-spam key option key
+	public $spam_key_option = 'spam-killer-key';   // The anti-spam key option key
 	protected $comment_issues;                     // Reasons for comments being marked as spam
 
 	/**
@@ -37,10 +37,10 @@ class Spam_Destroyer {
 
 		// Possible comment issues
 		$this->comment_issues = array(
-			'hidden-field-not-set' => __( 'Hidden input field not set', 'spam-killer' ),
-			'wrong-timestamp'      => __( 'Time not set correctly', 'spam-killer' ),
-			'captcha-wrong'        => __( 'CAPTCHA not answered correctly', 'spam-killer' ),
-			'cookie-not-set'       => __( 'Cookie not set', 'spam-killer' ),
+			'hidden-field-not-set' => __( 'Hidden input field not set', 'spam-destroyer' ),
+			'wrong-timestamp'      => __( 'Time not set correctly', 'spam-destroyer' ),
+			'captcha-wrong'        => __( 'CAPTCHA not answered correctly', 'spam-destroyer' ),
+			'cookie-not-set'       => __( 'Cookie not set', 'spam-destroyer' ),
 		);
 
 		// Add filters
@@ -343,7 +343,7 @@ class Spam_Destroyer {
 	}
 
 	/**
-	 * Decrypt
+	 * Decrypt.
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.7
@@ -391,7 +391,7 @@ class Spam_Destroyer {
 		$error = '';
 		$error .= '
 		<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
-			<p>' . __( 'Please confirm you are human by typing the words in the box below.', 'spam-killer' ) . '</p>
+			<p>' . __( 'Please confirm you are human by typing the words in the box below.', 'spam-destroyer' ) . '</p>
 				' . $this->get_captcha_image( $question )
 				. $this->get_extra_input_field() . '
 
@@ -421,7 +421,7 @@ class Spam_Destroyer {
 			if ( isset( $this->comment_issues[$issue_raw] ) ) {
 				$issue_human_readable = $this->comment_issues[$issue_raw]; // Convert to human readable format
 
-				$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-killer' ) . ' ' . esc_html( $issue_human_readable ) . '\');">' . __( 'Why do I need to answer this?', 'spam-killer' ) . '</a></p>';
+				$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-destroyer' ) . ' ' . esc_html( $issue_human_readable ) . '\');">' . __( 'Why do I need to answer this?', 'spam-destroyer' ) . '</a></p>';
 				$error .= '<input id="failed" name="failed" type="hidden" value="' . esc_attr( $issue_raw ) . '" />';
 				$error .= '<input id="comment_karma" name="comment_karma" type="hidden" value="' . esc_attr( $issue_raw ) . '" />';
 			}
