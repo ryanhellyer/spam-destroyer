@@ -40,11 +40,11 @@ class Spam_Destroyer_Stats {
 
 		// Only iterate occasionally, based on the set frequency
 		if ( 1 == rand( 1, $this->frequency ) ) {
-			$stats = get_option( 'spam-killer-stats' ); // Get existing stats
+			$stats = get_option( 'spam-destroyer-stats' ); // Get existing stats
 			$months_since_epoch = absint( time() / MONTH_IN_SECONDS ); // The number of days since epoch
 			$stats[$months_since_epoch] = absint( $stats[$months_since_epoch] );
 			$stats[$months_since_epoch] = $stats[$months_since_epoch] + $this->frequency; // We need to iterate by more than 1, since we are only sporadically storing stats information
-			update_option( 'spam-killer-stats', $stats );
+			update_option( 'spam-destroyer-stats', $stats );
 		}
 
 	}

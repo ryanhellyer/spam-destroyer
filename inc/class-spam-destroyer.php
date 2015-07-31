@@ -17,7 +17,7 @@ class Spam_Destroyer {
 	public $max_word_length;                       // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
 	public $captcha_time_passed = HOUR_IN_SECONDS; // Time limit on answering individual CAPTCHA questions
 	public $time_limit = 300;                      // CAPTCHA must be answered in this number of seconds
-	public $spam_key_option = 'spam-killer-key';   // The anti-spam key option key
+	public $spam_key_option = 'spam-destroyer-key';   // The anti-spam key option key
 	protected $comment_issues;                     // Reasons for comments being marked as spam
 
 	/**
@@ -230,10 +230,10 @@ class Spam_Destroyer {
 			 */
 
 			// If user answers CAPTCHA, then let them sail on through
-			if ( isset( $_POST['spam-killer-question'] ) ) {
+			if ( isset( $_POST['spam-destroyer-question'] ) ) {
 
 				// Extra question and time stamp from encrypted blob
-				$text = $this->decrypt( $_POST['spam-killer-question'] );
+				$text = $this->decrypt( $_POST['spam-destroyer-question'] );
 				$text = explode( '|||', $text );
 				$question = $text[0];
 				$time = $text[1];
@@ -247,7 +247,7 @@ class Spam_Destroyer {
 				}
 
 				// Did they answer it correctly?
-				$answer = $_POST['spam-killer-captcha'];
+				$answer = $_POST['spam-destroyer-captcha'];
 				if ( $question == $answer && '' != $question ) {
 					return $comment; // w00p w00p! The CAPTCHA was answered correctly :)
 				} else {
@@ -445,10 +445,10 @@ class Spam_Destroyer {
 	 */
 	public function get_captcha_image( $question ) {
 		return '
-		<input type="hidden" name="spam-killer-question" value="' . esc_attr( $question ) . '" />
+		<input type="hidden" name="spam-destroyer-question" value="' . esc_attr( $question ) . '" />
 		<img src="' . esc_url( home_url( '?captcha=' . $question ) ) . '" alt="" />
 		<p>
-			<input type="text" value="" name="spam-killer-captcha" />
+			<input type="text" value="" name="spam-destroyer-captcha" />
 		</p>';
 	}
 
