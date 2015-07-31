@@ -11,3 +11,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Remove options
 delete_option( 'spam-killer-stats' );
+delete_option( 'spam-killer-key' );
