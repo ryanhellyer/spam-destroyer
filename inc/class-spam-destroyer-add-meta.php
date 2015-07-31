@@ -89,7 +89,7 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 		// Output the issue into the column
 		$issue = get_comment_meta( $id, 'issues', true );
 		if ( isset( $this->comment_issues[$issue] ) ) {
-			echo esc_attr( $this->comment_issues[$issue] );
+			echo '<strong>' . __( 'Failed initial spam check', 'spam-destroyer' ) . ':</strong> ' . esc_html( $this->comment_issues[$issue] );
 		}
 
 	}

@@ -1,7 +1,5 @@
 <?php
 
-//// class-spam-destroyer-settings.php ... check_admin_referer() not working
-
 /**
  * Spam Destroyer class
  * 

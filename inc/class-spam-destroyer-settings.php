@@ -79,8 +79,8 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 
 		// Bail out if not on correct page
 		if (
-//			! check_admin_referer( $this->nonce )
-//			||
+			! wp_verify_nonce( $_GET['_wpnonce'], $this->nonce )
+			||
 			! is_admin()
 			||
 			! isset( $_GET['reset_spam_key'] )

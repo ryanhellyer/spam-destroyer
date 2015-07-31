@@ -44,8 +44,8 @@ define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
 require( 'inc/class-spam-destroyer.php' );
 
 // Load extra modules - provides extra protection when required
-require( 'modules/class-spam-destroyer-add-meta.php' );
-require( 'modules/class-spam-destroyer-stats.php' );
+require( 'inc/class-spam-destroyer-add-meta.php' );
+require( 'inc/class-spam-destroyer-stats.php' );
 
 // Only load generate CAPTCHA class if appropriate GET request sent
 if ( isset( $_GET['captcha'] ) ) {
