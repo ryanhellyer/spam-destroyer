@@ -53,7 +53,6 @@ class Spam_Destroyer {
 		add_filter( 'antispam-fields',                      array( $this, 'get_extra_input_field' ) ); // WordPress comments page
 
 		// Add to hooks
-		add_action( 'comment_form_after_fields',            array( $this, 'non_js_captcha' ) ); // Show CAPTCHA for those with JavaScript turned off
 		add_action( 'comment_form',                         array( $this, 'extra_input_field' ) ); // WordPress comments page
 		add_action( 'signup_hidden_fields',                 array( $this, 'extra_input_field' ) ); // WordPress multi-site signup page
 		add_action( 'bp_after_registration_submit_buttons', array( $this, 'extra_input_field' ) ); // BuddyPress signup page
@@ -213,31 +212,6 @@ class Spam_Destroyer {
 				'lifetime' => absint( apply_filters( 'spam_destroyer_cookie_lifetime', HOUR_IN_SECONDS ) ) )
 		);
 
-	}
-
-	/**
-	 * Provides CAPTCHA for users without JS turned on
-	 *
-	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
-	 * @since 1.7
-	 */
-	public function non_js_captcha() {
-
-		// Grab CAPTCHA question
-		require( SPAM_DESTROYER_DIR . '/inc/class-spam-destroyer-captcha-question.php' );
-		$captcha = new Spam_Destroyer_CAPTCHA_Question();
-
-		if ( 'very-high' != $this->level ) {
-			echo '<noscript>';
-		}
-
-		echo __( 'Please confirm you are human by typing the words in the box below.', 'spam-killer' );
-		$question = $captcha->get_encrypted_question();
-		echo $this->get_captcha_image( $question );
-
-		if ( 'very-high' != $this->level ) {
-			echo '</noscript>';
-		}
 	}
 
 	/**
