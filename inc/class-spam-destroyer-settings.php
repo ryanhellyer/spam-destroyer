@@ -16,7 +16,18 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 	 */
 	public function __construct() {
 		add_filter( 'plugin_row_meta', array( $this, 'plugins_page_meta' ), 10, 4 );
-		add_action( 'admin_init', array( $this, 'reset_spam_key' ) );
+		add_action( 'admin_init',      array( $this, 'reset_spam_key' ) );
+		add_action( 'admin_notices',   array( $this, 'key_change_notice' ) );
+	}
+
+	/**
+	 * Add an admin notice, saying that spam key has been changed.
+	 */
+	public function key_change_notice() {
+		echo '
+		<div class="updated">
+			<p>' . __( 'The Spam Destroyer key has been reset.', 'spam-killer' ) . '</p>
+		</div>';
 	}
 
 	/**
@@ -39,7 +50,7 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 		// Add the spam key reset link
 		$plugin_meta[] = sprintf( 
 			'<a href="%s">%s</a>',
-			wp_nonce_url( admin_url( '?reset_spam_key=true' ), 'spam-killer' ), 
+			wp_nonce_url( admin_url( 'plugins.php?reset_spam_key=true' ), 'spam-killer' ), 
 			__( 'Reset spam key', 'spam-killer' ) 
 		);
 
@@ -61,18 +72,14 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 	}
 
 	/**
-	 * Generate a new spam key
-	 *
-	 * @access  private
-	 * @param   string  $input   If input is 'on' then checkbox has been checked
-	 * @return  string  $output  The santized spam protection key
+	 * Generate a new spam key.
 	 */
 	public function reset_spam_key() {
 
 		// Bail out if not on correct page
 		if (
-			! check_admin_referer( 'spam-killer' )
-			||
+//			! check_admin_referer( 'spam-killer' )
+//			||
 			! is_admin()
 			||
 			! isset( $_GET['reset_spam_key'] )

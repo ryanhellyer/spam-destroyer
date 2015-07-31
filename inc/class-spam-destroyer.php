@@ -1,6 +1,7 @@
 <?php
 
 //$this->level ----------- this needs removed since not relevant any longer
+//// class-spam-destroyer-settings.php ... check_admin_referer() not working
 
 /**
  * Spam Destroyer class
