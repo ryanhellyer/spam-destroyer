@@ -4,13 +4,13 @@ Plugin Name: Spam Destroyer
 Plugin URI: http://geek.ryanhellyer.net/products/spam-destroyer/
 Description: Kills spam dead in it's tracks
 Author: Ryan Hellyer
-Version: 1.8.1
+Version: 1.8.4
 Author URI: http://geek.ryanhellyer.net/
 
-Copyright (c) 2014 Ryan Hellyer
+Copyright (c) 2015 Ryan Hellyer
 
 
-Based on the following open source project:
+Based on the following open source projects:
 
 Cookies for Comments by Donncha O Caoimh
 http://ocaoimh.ie/cookies-for-comments/
@@ -55,4 +55,5 @@ if ( isset( $_GET['captcha'] ) ) {
 // Load admin panel only files
 if ( is_admin() ) {
 	require( 'inc/class-spam-destroyer-settings.php' );
+	require( 'inc/class-spam-destroyer-review.php' );
 }

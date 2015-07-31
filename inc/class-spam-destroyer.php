@@ -9,7 +9,7 @@
  */
 class Spam_Destroyer {
 
-	public $version = '1.8.3';                     // The pluin version number
+	public $version = '1.8.4';                     // The pluin version number
 	public $spam_key;                              // Key used for confirmation of bot-like behaviour
 	public $speed = 2;                             // Will be killed as spam if posted faster than this
 	public $encryption_method = 'AES-256-CBC';     // The encryption method used
