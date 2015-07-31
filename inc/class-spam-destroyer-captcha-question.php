@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create questions for CAPTCHA
+ * Create questions for CAPTCHA.
  *
  * Derived from "Script para la generación de CAPTCHAS" by Jose Rodrigueze - http://code.google.com/p/cool-php-captcha
  *
@@ -23,8 +23,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	public function __construct() {
 		$this->set_keys(); // Set variables
 
-		$this->set_protection_settings();
-		$this->spam_key = get_option( 'spam-killer-key' );
+		$this->spam_key = get_option( $this->spam_key_option );
 	}
 
 	/**

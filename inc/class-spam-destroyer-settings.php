@@ -19,7 +19,6 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 	public function __construct() {
 		add_filter( 'plugin_row_meta', array( $this, 'plugins_page_meta' ), 10, 4 );
 		add_action( 'admin_init',      array( $this, 'reset_spam_key' ) );
-		add_action( 'admin_notices',   array( $this, 'key_change_notice' ) );
 	}
 
 	/**
@@ -91,10 +90,11 @@ class Spam_Destroyer_Settings extends Spam_Destroyer {
 			return;
 		}
 
-		// Reset the spam key
-		$key = $this->generate_new_key();
-		update_option( 'spam-killer-key', $key );
-		$key = get_option( 'spam-killer-key' );
+		// Delete the spam key - will be reset during next page load when not found
+		delete_option( $this->spam_key_option );
+
+		// Add admin notice about key change
+		add_action( 'admin_notices',   array( $this, 'key_change_notice' ) );
 	}
 
 }

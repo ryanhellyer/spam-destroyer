@@ -60,7 +60,6 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 	public function __construct() {
 
 		parent::__construct();
-		$this->set_protection_settings();
 		$this->init();
 	}
 

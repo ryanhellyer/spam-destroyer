@@ -1,6 +1,5 @@
 <?php
 
-//$this->level ----------- this needs removed since not relevant any longer
 //// class-spam-destroyer-settings.php ... check_admin_referer() not working
 
 /**
@@ -232,8 +231,8 @@ class Spam_Destroyer {
 			 * Process comments
 			 */
 
-			// If user answers CAPTCHA, then let them sail on through (users on very high protection levels must pass other tests too)
-			if ( 'very-high' != $this->level && isset( $_POST['spam-killer-question'] ) ) {
+			// If user answers CAPTCHA, then let them sail on through
+			if ( isset( $_POST['spam-killer-question'] ) ) {
 
 				// Extra question and time stamp from encrypted blob
 				$text = $this->decrypt( $_POST['spam-killer-question'] );
