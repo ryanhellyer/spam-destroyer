@@ -11,8 +11,6 @@
  */
 class Spam_Destroyer_Settings extends Spam_Destroyer {
 
-	public $nonce = 'spam-destroyer';
-
 	/**
 	 * Fire the constructor up :)
 	 */
