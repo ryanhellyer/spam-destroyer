@@ -15,7 +15,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	public $spam_key; // The spam protection key
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.8
@@ -28,7 +28,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	}
 
 	/**
-	 * Get the encrypted text
+	 * Get the encrypted text.
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.7
@@ -47,7 +47,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	}
 
 	/**
-	 * Encrypt
+	 * Encrypt.
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.7
@@ -63,7 +63,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	}
 
 	/**
-	 * Text generation
+	 * Text generation.
 	 *
 	 * @return string Text
 	 */
@@ -76,7 +76,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	}
 
 	/**
-	 * Random text generation
+	 * Random text generation.
 	 *
 	 * @return string Text
 	 */
@@ -102,7 +102,7 @@ class Spam_Destroyer_CAPTCHA_Question extends Spam_Destroyer {
 	}
 
 	/**
-	 * Random dictionary word generation
+	 * Random dictionary word generation.
 	 *
 	 * @param boolean $extended Add extended "fake" words
 	 * @return string Word
