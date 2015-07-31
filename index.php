@@ -44,8 +44,6 @@ define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
 require( 'inc/class-spam-destroyer.php' );
 
 // Load extra modules - provides extra protection when required
-require( 'modules/class-spam-destroyer-black-list.php' );
-require( 'modules/class-spam-destroyer-forced-captcha.php' );
 require( 'modules/class-spam-destroyer-add-meta.php' );
 require( 'modules/class-spam-destroyer-stats.php' );
 
@@ -57,6 +55,4 @@ if ( isset( $_GET['captcha'] ) ) {
 // Load admin panel only files
 if ( is_admin() ) {
 	require( 'inc/class-spam-destroyer-settings.php' );
-	require( 'modules/class-spam-destroyer-protection-level.php' );
 }
-

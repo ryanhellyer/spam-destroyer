@@ -5,7 +5,7 @@
  * http://www.quirksmode.org/js/cookies.html
  */
 function sdCreateCookie(name) {
-var unix = Math.round(+new Date()/1000); // Current time in seconds
+	var unix = Math.round(+new Date()/1000); // Current time in seconds
 	var expire = new Date(); // Current time in miliseconds
 	expire.setTime(expire.getTime()+(spam_destroyer.lifetime*1000)); // Cookie lifetime in seconds * 1000 miliseconds
 	var expires = "; expires="+expire.toUTCString();

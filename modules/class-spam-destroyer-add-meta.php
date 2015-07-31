@@ -79,6 +79,7 @@ class Spam_Destroyer_Add_Meta extends Spam_Destroyer {
 	 */
 	public function comment_column( $column, $id ) {
 
+		// Bail out if not on the issues column;
 		if ( 'issues' != $column ) {
 			return;
 		}
