@@ -12,15 +12,16 @@
  */
 class Spam_Destroyer {
 
-	public $version = '1.8.2';
-	public $spam_key; // Key used for confirmation of bot-like behaviour
-	public $speed = 2; // Will be killed as spam if posted faster than this
-	public $level; // Set spam protection level
-	public $encryption_method = 'AES-256-CBC'; // The encryption method used
-	public $min_word_length; // Min word length (for non-dictionary random text generation)
-	public $max_word_length; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
+	public $version = '1.8.3';                     // The pluin version number
+	public $spam_key;                              // Key used for confirmation of bot-like behaviour
+	public $speed = 2;                             // Will be killed as spam if posted faster than this
+	public $encryption_method = 'AES-256-CBC';     // The encryption method used
+	public $min_word_length;                       // Min word length (for non-dictionary random text generation)
+	public $max_word_length;                       // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
 	public $captcha_time_passed = HOUR_IN_SECONDS; // Time limit on answering individual CAPTCHA questions
-	protected $comment_issues; // Reasons for comments being marked as spam
+	public $time_limit = 300;                      // CAPTCHA must be answered in this number of seconds
+	public $spam_key_option = 'spam-killer-key'    // The anti-spam key option key
+	protected $comment_issues;                     // Reasons for comments being marked as spam
 
 	/**
 	 * Preparing to launch the almighty spam attack!
@@ -39,6 +40,7 @@ class Spam_Destroyer {
 			'hidden-field-not-set' => __( 'Hidden input field not set', 'spam-killer' ),
 			'wrong-timestamp'      => __( 'Time not set correctly', 'spam-killer' ),
 			'captcha-wrong'        => __( 'CAPTCHA not answered correctly', 'spam-killer' ),
+			'cookie-not-set'       => __( 'Cookie not set', 'spam-killer' ),
 		);
 
 		// Add filters
@@ -70,12 +72,12 @@ class Spam_Destroyer {
 	 * @access   protected
 	 */
 	protected function set_keys() {
-		$this->spam_key = get_option( 'spam-killer-key' );
+		$this->spam_key = get_option( $this->spam_key_option );
 
 		// If no key set, then generate a one
 		if ( '' == $this->spam_key ) {
 			$key = $this->generate_new_key();
-			update_option( 'spam-killer-key', $key );
+			update_option( $this->spam_key_option, $key );
 		}
 	}
 
@@ -91,99 +93,6 @@ class Spam_Destroyer {
 		$number = home_url() . rand( 0, 999999 ); // Use home_url() to make it unique and rand() to ensure some randomness in the output
 		$key = md5( $number ); // Use MD5 to ensure a consistent type of string
 		return $key;
-	}
-
-	/**
-	 * Changing settings based on the protection level chosen
-	 *
-	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
-	 * @since 1.0
-	 */
-	public function set_protection_settings() {
-
-		// Set "low" protection settings
-		if ( 'low' == $this->level ) {
-			$this->min_word_length = 3; // Min word length (for non-dictionary random text generation)
-			$this->max_word_length = 5; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
-
-			if ( isset( $this->y_period ) ) {
-				$this->y_period    = 92;
-			}
-			if ( isset( $this->y_amplitude ) ) {
-				$this->y_amplitude = 1;
-			}
-			if ( isset( $this->x_period ) ) {
-				$this->x_period    = 91;
-			}
-			if ( isset( $this->x_amplitude ) ) {
-				$this->x_amplitude = 1;
-			}
-			if ( isset( $this->max_rotation ) ) {
-				$this->max_rotation = 2; // letter rotation clockwise
-			}
-			if ( isset( $this->scale ) ) {
-				$this->scale = 3; // Internal image size factor (for better image quality) - 1: low, 2: medium, 3: high
-			}
-		}
-
-		// Set "medium" protection settings
-		if ( 'medium' == $this->level || 'high' == $this->level ) {
-			$this->min_word_length = 5; // Min word length (for non-dictionary random text generation)
-			$this->max_word_length = 8; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
-
-			if ( isset( $this->y_period ) ) {
-				$this->y_period    = 12;
-			}
-			if ( isset( $this->y_amplitude ) ) {
-				$this->y_amplitude = 1;
-			}
-			if ( isset( $this->x_period ) ) {
-				$this->x_period    = 11;
-			}
-			if ( isset( $this->x_amplitude ) ) {
-				$this->x_amplitude = 1;
-			}
-			if ( isset( $this->max_rotation ) ) {
-				$this->max_rotation = 7; // letter rotation clockwise
-			}
-			if ( isset( $this->shadow_color ) ) {
-				$this->shadow_color = true; // Shadow color in RGB-array or null ... array(0, 0, 0);
-			}
-			if ( isset( $this->line_width ) ) {
-				$this->line_width = 1; // Horizontal line through the text
-			}
-
-		}
-
-		// Set "very-high" protection settings
-		if ( 'very-high' == $this->level ) {
-			$this->min_word_length = 5; // Min word length (for non-dictionary random text generation)
-			$this->max_word_length = 8; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
-
-			if ( isset( $this->y_period ) ) {
-				$this->y_period    = 12;
-			}
-			if ( isset( $this->y_amplitude ) ) {
-				$this->y_amplitude = 7;
-			}
-			if ( isset( $this->x_period ) ) {
-				$this->x_period    = 10;
-			}
-			if ( isset( $this->x_amplitude ) ) {
-				$this->x_amplitude = 7;
-			}
-			if ( isset( $this->max_rotation ) ) {
-				$this->max_rotation = 8; // letter rotation clockwise
-			}
-			if ( isset( $this->shadow_color ) ) {
-				$this->shadow_color = true; // Shadow color in RGB-array or null ... array(0, 0, 0);
-			}
-			if ( isset( $this->line_width ) ) {
-				$this->line_width = 7; // Horizontal line through the text
-			}
-
-		}
-
 	}
 
 	/**
@@ -335,8 +244,8 @@ class Spam_Destroyer {
 				// Confirm question was answered recently
 				$this->check_time( $time, $comment );
 				$time = time() - $text[1]; // Number of seconds since CAPTCHA was generated
-				$time_limit = 300; // CAPTCHA must be answered in this number of seconds
-				if ( $time_limit < $time ) {
+				if ( $this->time_limit < $time ) {
+					$this->comment_issue = 'wrong-timestamp';
 					$this->kill_spam_dead( $comment ); // TOO SLOW! CAPTCHA wasn't answered within the alotted time and so they'll need to retry
 				}
 
@@ -345,6 +254,7 @@ class Spam_Destroyer {
 				if ( $question == $answer && '' != $question ) {
 					return $comment; // w00p w00p! The CAPTCHA was answered correctly :)
 				} else {
+					$this->comment_issue = 'captcha-wrong';
 					$this->kill_spam_dead( $comment ); // SPLAT! Spam is killed, since it can't even answer a simple CAPTCHA!
 				}
 			}
@@ -365,6 +275,7 @@ class Spam_Destroyer {
 				}
 
 			} else {
+				$this->comment_issue = 'cookie-not-set';
 				$this->kill_spam_dead( $comment ); // Ohhhh! Cookie not set, so killing the little dick before it gets through!
 			}
 
