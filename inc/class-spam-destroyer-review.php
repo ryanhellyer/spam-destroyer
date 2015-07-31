@@ -12,23 +12,28 @@
 class Spam_Destroyer_Review {
 
 	/**
-	 * Variables.
+	 * Constants.
 	 * These should be customised for each project.
 	 */
-	private $slug = 'spam-destroyer';      // The plugin slug
-	private $name = 'Spam Destroyer';      // The plugin name
-	private $time_limit = WEEK_IN_SECONDS; // The time limit at which notice is shown
-	private $plugin_file = 'index.php';
+	const slug = 'spam-destroyer';      // The plugin slug
+	const name = 'Spam Destroyer';      // The plugin name
+	const time_limit = WEEK_IN_SECONDS; // The time limit at which notice is shown
+	const plugin_file = 'index.php';
+
+	/**
+	 * Variables.
+	 */
+	public $nobug_option;
 
 	/**
 	 * Fire the constructor up :)
 	 */
 	public function __construct() {
+		$this->nobug_option = self::slug . '-no-bug5';
 
 		// Register hook on activation
-		$plugin_path = WP_PLUGIN_DIR . '/' . $this->slug . '/' . $this->plugin_file;
+		$plugin_path = WP_PLUGIN_DIR . '/' . self::slug . '/' . self::plugin_file;
 		register_activation_hook( $plugin_path, array( $this, 'set_activation_date' ) );
-//$this->set_activation_date();
 
 		// Loading main functionality
 		add_action( 'admin_init', array( $this, 'check_installation_date' ) );
@@ -39,7 +44,7 @@ class Spam_Destroyer_Review {
 	 * Get the current time and set it as an option when the plugin is activated.
 	 */
 	public function set_activation_date() {
-		add_option( $this->slug . '-activation-date', time() );
+		add_option( self::slug . '-activation-date', time() );
 	}
 
 	/**
@@ -47,11 +52,11 @@ class Spam_Destroyer_Review {
 	 */
 	public function check_installation_date() {
 
-		if ( '' == get_option( $this->slug . '-no-bug' ) ) {
+		if ( '' == get_option( $this->nobug_option ) ) {
 
-			$install_date = get_option( $this->slug . '-activation-date' );
+			$install_date = get_option( self::slug . '-activation-date' );
 
-			if ( ( time() - $install_date ) >  $this->time_limit  ) {
+			if ( ( time() - $install_date ) >  self::time_limit  ) {
 				add_action( 'admin_notices', array( $this, 'display_admin_notice' ) );
 			}
 
@@ -64,13 +69,15 @@ class Spam_Destroyer_Review {
 	 */
 	public function display_admin_notice() {
 
+		$no_bug_url = wp_nonce_url( admin_url( '?' . $this->nobug_option . '=true' ), 'review-nonce' );
+
 		echo '
 		<div class="updated">
-			<p>' . sprintf( __( 'You have been using the %s plugin for a week now, do you like it? If so, please leave us a review with your feedback!', 'spam-destroyer' ), $this->name ) . '
+			<p>' . sprintf( __( 'You have been using the %s plugin for a week now, do you like it? If so, please leave us a review with your feedback!', 'spam-destroyer' ), self::name ) . '
 				<br /><br />
-				<a class="button button-primary" href="' . esc_url( 'https://wordpress.org/support/view/plugin-reviews/' . $this->slug . '#postform' ) . '" target="_blank">' . __( 'Leave A Review', 'spam-destroyer' ) . '</a>
-				<br />
-				<a href="' . esc_url( wp_nonce_url( admin_url( '?' . $this->slug . '-no-bug=true' ), 'review-nonce' ) ) . '">' . __( "Don't show this message again.", 'spam-destroyer' ) . '</a>
+				<a onclick="location.href=\'' . esc_url( $no_bug_url ) . '\';" class="button button-primary" href="' . esc_url( 'https://wordpress.org/support/view/plugin-reviews/' . self::slug . '#postform' ) . '" target="_blank">' . __( 'Leave A Review', 'spam-destroyer' ) . '</a>
+				 &nbsp; 
+				<a href="' . esc_url( $no_bug_url ) . '">' . __( 'No thanks.', 'spam-destroyer' ) . '</a>
 			</p>
 		</div>';
 
@@ -90,7 +97,7 @@ class Spam_Destroyer_Review {
 				||
 				! is_admin()
 				||
-				! isset( $_GET[$this->slug . '-no-bug'] )
+				! isset( $_GET[$this->nobug_option] )
 				||
 				! current_user_can( 'manage_options' )
 			)
@@ -98,7 +105,7 @@ class Spam_Destroyer_Review {
 			return;
 		}
 
-		add_option( $this->slug . '-no-bug', TRUE );
+		add_option( $this->nobug_option, TRUE );
 
 	}
 
