@@ -50,17 +50,36 @@ class Spam_Destroyer_Generate_CAPTCHA extends Spam_Destroyer {
 	public $x_amplitude = 5;
 
 	public $max_rotation = 8; // letter rotation clockwise
-	public $scale = 3; // Internal image size factor (for better image quality) - 1: low, 2: medium, 3: high
-	public $blur = true; // Blur effect for better image quality (but slower image processing) - Better image results with scale=3
-	public $debug = false; // Debug?
-	public $im; // GD image
-	public $key; // The cache key
-	public $spam_key;
+	public $scale = 3;        // Internal image size factor (for better image quality) - 1: low, 2: medium, 3: high
+	public $blur = true;      // Blur effect for better image quality (but slower image processing) - Better image results with scale=3
+	public $debug = false;    // Debug?
+	public $im;               // GD image
+	public $key;              // The cache key value
+	public $spam_key;         // The spam key value
 
 	public function __construct() {
 
 		parent::__construct();
+
+		$this->set_captcha_settings();
 		$this->init();
+	}
+
+	/**
+	 * Set the CAPTCHA settings.
+	 */
+	public function set_captcha_settings() {
+
+		$this->min_word_length = 3; // Min word length (for non-dictionary random text generation)
+		$this->max_word_length = 5; // Max word length (for non-dictionary random text generation) - Used for dictionary words indicating the word-length for font-size modification purposes
+
+		$this->y_period    = 92;
+		$this->y_amplitude = 1;
+		$this->x_period    = 91;
+		$this->x_amplitude = 1;
+		$this->max_rotation = 2; // letter rotation clockwise
+		$this->scale = 3; // Internal image size factor (for better image quality) - 1: low, 2: medium, 3: high
+
 	}
 
 	/**
