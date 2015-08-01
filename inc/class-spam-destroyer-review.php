@@ -18,7 +18,7 @@ class Spam_Destroyer_Review {
 	const slug = 'spam-destroyer';      // The plugin slug
 	const name = 'Spam Destroyer';      // The plugin name
 	const time_limit = WEEK_IN_SECONDS; // The time limit at which notice is shown
-	const plugin_file = 'index.php';
+	const plugin_file = 'index.php';    // The main plugin file
 
 	/**
 	 * Variables.
@@ -29,7 +29,7 @@ class Spam_Destroyer_Review {
 	 * Fire the constructor up :)
 	 */
 	public function __construct() {
-		$this->nobug_option = self::slug . '-no-bug5';
+		$this->nobug_option = self::slug . '-no-bug';
 
 		// Register hook on activation
 		$plugin_path = WP_PLUGIN_DIR . '/' . self::slug . '/' . self::plugin_file;
@@ -65,7 +65,7 @@ class Spam_Destroyer_Review {
 	}
 
 	/**
-	 * Display Admin Notice, asking for a review
+	 * Display Admin Notice, asking for a review.
 	 */
 	public function display_admin_notice() {
 
