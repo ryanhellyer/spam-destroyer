@@ -1,8 +1,9 @@
 === Spam Destroyer ===
 Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman, forsite
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
-Tags: spam, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate
+Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
 Requires at least: 4.0
+Tested up to: 4.4
 Stable tag: 1.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,84 +35,90 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 == Changelog ==
 
-1.8.2 (21/3/2015)
-= Fixed bug which triggered legit comments to be detected as spam due to commenting too quickly. Time limit was adjusted from five seconds to two seconds to fix this.
-1.8.1 (11/11/2014)
-= Moved settings to discussions page
-= Reduced text string length
+2.0 (1/8/2015)
+= Implemented text image CAPTCHA fallback for when comment detected as spam
 = Improved performance via selective loading of PHP files
 = Improved documentation
-= Improved and additional links on plugins page
-
-1.8 (1/11/2014)
-= Addition of black-list for higher spam settings
+= Added additional links on plugins page
 = Implemented time-limit for answering CAPTCHA questions
-= Moved to a modular system for handling extra protective levels
 = Addition of notices in back-end to describe what checks the comment passed
-= Addition of a hidden admin page for manual adjustment of the spam protection level
-
-1.7.1
 = Removal of spam cleanout since redundant after addition of CAPTCHA fallback
+= Fixed bug which triggered legit comments to be detected as spam due to commenting too quickly. Time limit was adjusted from five seconds to two seconds to fix this.
 
-1.7
-= Addition of text image CAPTCHA
-= Modification of key setup - two way encryption
-= Low, key never changes; medium, key changes with nonce
+1.4.3 (21/12/2014)
 
-1.6
-= Addition of math CAPTCHA
+= Support for WordPress 4.1+ added.
+= Added translation string specification in header.
 
-1.5
-= Addition of crude API for handling CAPTCHA's
+1.4.2 (17/10/2014)
+
+= Fixed a bug in the spam checking that (I think) would have cleared the content of bbpress posts for logged in users
+= Fixed various spellling errors and grammar wrongs
+= Updated version compatibility
 
 = 1.4.1 (19/4/2014) =
 * Cleaning up PHPDocs
+
 = 1.4 (21/3/2014) =
 * Now automatically deletes spam comments older than a set time (5 days)
 * Removed kill.php from trunk
 * Updated readme file for current WordPress Release 
+
 = 1.3.2 (24/6/2013) =
 * Fixed short cookie time bug thanks to Milan Dinić
+
 = 1.3.1 (18/3/2013) =
 * Fixed bug which prevented user registration
 * Thanks to Marte Sollund and Ingvild Evje of <a href="http://nettsett.no/">Nettsett</a> for an excellent bug report
+
 = 1.3 (6/3/2013) =
 * Instantiated class to variable to allow for remove hooks and filters when necessary
 * Added redirect after spam comment detected
 * Added error notice on redirection due to spam comment detection
+
 = 1.2.5 (19/8/2012) =
 * Changed from kill.php file to kill.js file
 * Allows for caching of payload
 * Allows for automatic script concatentation
 * Cookie creation achieved via raw JS
 * Key is passed to script via wp_localize_script()
+
 = 1.2.4 (11/8/2012) =
 * Re-removed requirement for jQuery
 * Added try / catch to JS to ensure it doesn't fail
 * Moved JS enqueue to form field area so that it only loads when needed
 * Added Bjørn Johansen to the contributor list
 * Added correct mime-type to JS file
+
 = 1.2.3 (9/8/2012) =
 * Added requirement for jQuery due to bug with code introduced in 1.2.2
+
 = 1.2.2 (9/8/2012) =
 * Removed need for jQuery
+
 = 1.2.1 (9/8/2012) =
 * Moved script to footer on advice of Ronald Huereca and Bjørn Johansen
 * Fixed potential security flaw in kill.php
+
 = 1.2 (5/8/2012) =
 * Fixed multisite and BuddyPress bugs
 * Added support for bbPress registrations
 * Added support for bbPress guest posting protection
 * Removed the "bad word" list
+
 = 1.1 (5/8/2012) =
 * Added support for BuddyPress signup page
 * Added support for WordPress multisite signup page
+
 = 1.0.3 (30/7/2012) =
 * Upgrade to documentation
+
 = 1.0.2 (30/7/2012) =
 * Changed name to 'spam-destroyer'
+
 = 1.0.1 (30/7/2012) =
 * Cleaned up some legacy code from older implementations
+
 = 1.0 (29/7/2012) =
 * Initial release
 
