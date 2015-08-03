@@ -54,6 +54,15 @@ if ( isset( $_GET['captcha'] ) ) {
 
 // Load admin panel only files
 if ( is_admin() ) {
+
 	require( 'inc/class-spam-destroyer-settings.php' );
-	require( 'inc/class-spam-destroyer-review.php' );
+	require( 'inc/class-dotorg-plugin-review.php' );
+	new DotOrg_Plugin_Review(
+		array(
+			'slug'        => 'spam-destroyer', // The plugin slug
+			'name'        => 'Spam Destroyer', // The plugin name
+			'time_limit'  => WEEK_IN_SECONDS,  // The time limit at which notice is shown
+		)
+	);
+
 }
