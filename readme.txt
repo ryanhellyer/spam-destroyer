@@ -4,7 +4,8 @@ Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
 Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
 Requires at least: 4.0
 Tested up to: 4.4
-Stable tag: 1.8.2
+Stable tag: 2.0.1
+Text Domain: spam-destroyer
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +35,9 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 
 == Changelog ==
+
+2.0.1 (3/8/2015)
+= Implemented text image CAPTCHA fallback for when comment detected as spam
 
 2.0 (1/8/2015)
 = Implemented text image CAPTCHA fallback for when comment detected as spam
@@ -129,7 +133,7 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 * <a href="http://ocaoimh.ie/">Donncha O Caoimh</a> - Developer of Cookies for Comments, functionality of which is incorporated into Spam Destroyer<br />
 * <a href="http://elliottback.com/">Elliot Back</a> - Developer of WP Hashcash, functionality of which is incorporated into Spam Destroyer<br />
-* <a href="Marte Sollund and Ingvild Evje</a> - Bug reporting<br />
+* <a href="http://nettsett.no/">Marte Sollund and Ingvild Evje</a> - Bug reporting<br />
 * <a href="http://eHermitsInc.com/">Brian Layman</a> - Code advice<br />
 * <a href="http://ronalfy.com/">Ronald Huereca</a> - JS advice<br />
 * <a href="https://twitter.com/shawngaffney">Shawn Gaffney</a> - Bug reporting<br />

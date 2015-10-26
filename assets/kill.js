@@ -27,7 +27,7 @@ function sdReadCookie(name) {
  * Set cookie if not exists
  */
 function sdCheckCookies() {
-    var x = sdReadCookie(spam_destroyer.key)
+	var x = sdReadCookie(spam_destroyer.key)
 	if (x) {
 		// If cookie is set, do nothing
 	} else {
