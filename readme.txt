@@ -3,7 +3,7 @@ Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman, forsite
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
 Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
 Requires at least: 4.0
-Tested up to: 4.4
+Tested up to: 4.5
 Stable tag: 2.0.2
 Text Domain: spam-destroyer
 License: GPLv2 or later
@@ -37,7 +37,7 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 == Changelog ==
 
 2.0.2 (26/10/2015)
-= Upgraded the plugin update notice class
+= Upgraded the plugin review class
 
 2.0.1 (3/8/2015)
 = Implemented text image CAPTCHA fallback for when comment detected as spam
