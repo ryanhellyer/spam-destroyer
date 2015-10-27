@@ -14,7 +14,8 @@ if ( ! class_exists( 'DotOrg_Plugin_Review' ) ) :
 class DotOrg_Plugin_Review {
 
 	/**
-	 * Constants.
+	 * Private variables.
+	 *
 	 * These should be customised for each project.
 	 */
 	private $slug;        // The plugin slug
@@ -33,7 +34,6 @@ class DotOrg_Plugin_Review {
 
 		$this->slug        = $args['slug'];
 		$this->name        = $args['name'];
-		$this->plugin_file = $args['plugin_file'];
 		if ( isset( $args['time_limit'] ) ) {
 			$this->time_limit  = $args['time_limit'];
 		} else {
@@ -45,6 +45,74 @@ class DotOrg_Plugin_Review {
 		// Loading main functionality
 		add_action( 'admin_init', array( $this, 'check_installation_date' ) );
 		add_action( 'admin_init', array( $this, 'set_no_bug' ), 5 );
+	}
+
+	/**
+	 * Seconds to words.
+	 * Returns a human readable string to describe the number of seconds.
+	 *
+	 * @param   int     $seconds  The number of seconds
+	 * @return  string            A written description of the time
+	 */
+	public function seconds_to_words( $seconds ) {
+
+		// Get the years
+		$years = ( intval( $seconds ) / MONTH_IN_SECONDS ) % 4;
+		if ( $years > 1 ) {
+			return sprintf( __( '%s years', $this->slug ), $years );
+		} elseif ( $years > 0) {
+			return __( 'a year', $this->slug );
+		}
+
+		// Get the months
+		$months = ( intval( $seconds ) / MONTH_IN_SECONDS ) % 4;
+		if ( $months > 1 ) {
+			return sprintf( __( '%s months', $this->slug ), $months );
+		} elseif ( $months > 0) {
+			return __( 'a month', $this->slug );
+		}
+
+		// Get the weeks
+		$weeks = ( intval( $seconds ) / WEEK_IN_SECONDS ) % 4;
+		if ( $weeks > 1 ) {
+			return sprintf( __( '%s weeks', $this->slug ), $weeks );
+		} elseif ( $weeks > 0) {
+			return __( 'a week', $this->slug );
+		}
+
+		// Get the days
+		$days = ( intval( $seconds ) / DAY_IN_SECONDS ) % 7;
+		if ( $days > 1 ) {
+			return sprintf( __( '%s days', $this->slug ), $days );
+		} elseif ( $days > 0) {
+			return __( 'a day', $this->slug );
+		}
+
+		// Get the hours
+		$hours = ( intval( $seconds ) / HOUR_IN_SECONDS ) % 24;
+		if ( $hours > 1 ) {
+			return sprintf( __( '%s hours', $this->slug ), $hours );
+		} elseif ( $hours > 0) {
+			return __( 'an hour', $this->slug );
+		}
+
+		// Get the minutes
+		$minutes = ( intval( $seconds ) / MINUTE_IN_SECONDS ) % 60;
+		if ( $minutes > 1 ) {
+			return sprintf( __( '%s minutes', $this->slug ), $minutes );
+		} elseif ( $minutes > 0) {
+			return __( 'a minute', $this->slug );
+		}
+
+		// Get the seconds
+		$seconds = intval( $seconds ) % 60;
+		if ( $seconds > 1 ) {
+			return sprintf( __( '%s seconds', $this->slug ), $seconds );
+		} elseif ( $seconds > 0) {
+			return __( 'a second', $this->slug );
+		}
+
+		return;
 	}
 
 	/**
@@ -76,9 +144,11 @@ class DotOrg_Plugin_Review {
 
 		$no_bug_url = wp_nonce_url( admin_url( '?' . $this->nobug_option . '=true' ), 'review-nonce' );
 
+		$time = $this->seconds_to_words( time() - get_site_option( $this->slug . '-activation-date' ) );
+
 		echo '
 		<div class="updated">
-			<p>' . sprintf( __( 'You have been using the %s plugin for a week now, do you like it? If so, please leave us a review with your feedback!', 'spam-destroyer' ), $this->name ) . '
+			<p>' . sprintf( __( 'You have been using the %s plugin for %s now, do you like it? If so, please leave us a review with your feedback!', 'spam-destroyer' ), $this->name, $time ) . '
 				<br /><br />
 				<a onclick="location.href=\'' . esc_url( $no_bug_url ) . '\';" class="button button-primary" href="' . esc_url( 'https://wordpress.org/support/view/plugin-reviews/' . $this->slug . '#postform' ) . '" target="_blank">' . __( 'Leave A Review', 'spam-destroyer' ) . '</a>
 				   

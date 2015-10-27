@@ -9,11 +9,7 @@
  */
 class Spam_Destroyer {
 
-<<<<<<< HEAD
-	public $version = '2.0';                     // The pluin version number
-=======
 	public $version = '2.0';                       // The pluin version number
->>>>>>> captcha
 	public $spam_key;                              // Key used for confirmation of bot-like behaviour
 	public $speed = 2;                             // Will be killed as spam if posted faster than this
 	public $encryption_method = 'AES-256-CBC';     // The encryption method used

@@ -1,5 +1,5 @@
 === Spam Destroyer ===
-Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman, forsite
+Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
 Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
 Requires at least: 4.0
