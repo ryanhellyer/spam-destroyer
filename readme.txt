@@ -3,8 +3,7 @@ Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman
 Donate link: http://geek.ryanhellyer.net/products/spam-destroyer/
 Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
 Requires at least: 4.0
-Tested up to: 4.5
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 Text Domain: spam-destroyer
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -35,6 +34,9 @@ Check out the FAQ on the <a href="http://geek.ryanhellyer.net/products/spam-dest
 
 
 == Changelog ==
+
+2.0.6 (26/11/2015)
+= Fixing logged in user bug.
 
 2.0.5 (29/10/2015)
 = Removed the plugin review class due to strange errors.
