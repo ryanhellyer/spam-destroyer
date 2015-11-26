@@ -258,8 +258,6 @@ class Spam_Destroyer {
 
 			// Check the hidden input field against the key
 			if ( $_POST['killer_value'] != $this->spam_key ) {
-//echo $_POST['killer_value']."\n";
-//echo $this->spam_key;die;
 				$this->comment_issue = 'hidden-field-not-set';
 				$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
 			}
@@ -309,36 +307,65 @@ class Spam_Destroyer {
 	 *
 	 * @author Ryan Hellyer <ryanhellyer@gmail.com>
 	 * @since 1.0
+	 * @param   array  $comment  The posted commented
+	 * @return  array  $comment  The posted comment
 	 */
-	public function check_for_post_evilness( $result ) {
+	public function check_for_post_evilness( $comment ) {
 
 		// If the user is logged in, then they're clearly trusted, so continue without checking
 		if ( is_user_logged_in() ) {
-			return $result;
+			return $comment;
+		}
+
+		// If user answers CAPTCHA, then let them sail on through
+// EVERYTHING IN HERE NEEDS CHECKED IF IT WORKS WITH BBPRESS AND CO.
+		if ( isset( $_POST['spam-destroyer-question'] ) ) {
+
+			// Extra question and time stamp from encrypted blob
+			$text = $this->decrypt( $_POST['spam-destroyer-question'] );
+			$text = explode( '|||', $text );
+			$question = $text[0];
+			$time = $text[1];
+
+			// Confirm question was answered recently
+			$this->check_time( $time, $comment );
+			$time = time() - $text[1]; // Number of seconds since CAPTCHA was generated
+			if ( $this->time_limit < $time ) {
+				$this->comment_issue = 'wrong-timestamp';
+				$this->kill_spam_dead( $comment ); // TOO SLOW! CAPTCHA wasn't answered within the alotted time and so they'll need to retry
+			}
+
+			// Did they answer it correctly?
+			$answer = $_POST['spam-destroyer-captcha'];
+			if ( $question == $answer && '' != $question ) {
+				return $comment; // w00p w00p! The CAPTCHA was answered correctly :)
+			} else {
+				$this->comment_issue = 'captcha-wrong';
+				$this->kill_spam_dead( $comment ); // SPLAT! Spam is killed, since it can't even answer a simple CAPTCHA!
+			}
 		}
 
 		// Check the hidden input field against the key
 		if ( $_POST['killer_value'] != $this->spam_key ) {
-			// BAM! And the spam signup is dead :)
-			if ( isset( $_POST['bbp_topic_id'] ) ) {
-				bbp_add_error('bbp_reply_content', __('Sorry, but you have been detected as spam', 'spam-destroyer' ) );
-			} else {
-				$result['errors']->add( 'blogname', '' );
-			}
+			$this->comment_issue = 'hidden-field-not-set';
+			$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
 		}
 
 		// Check for cookies presence
 		if ( isset( $_COOKIE[ $this->spam_key ] ) ) {
+
 			// If time not set correctly, then assume it's spam
 			if ( $_COOKIE[$this->spam_key] > 1 && ( ( time() - $_COOKIE[$this->spam_key] ) < $this->speed ) ) {
-				// Something's up, since the commenters cookie time frame doesn't match ours
-			$result['errors']->add( 'blogname', '' );
+				$this->comment_issue = 'wrong-timestamp';
+				$this->kill_spam_dead( $comment ); // Something's up, since the commenters cookie time frame doesn't match ours
 			}
+
 		} else {
-			// Cookie not set therefore destroy the evil splogger
-			$result['errors']->add( 'blogname', '' );
+			$this->comment_issue = 'cookie-not-set';
+			$this->kill_spam_dead( $comment ); // Ohhhh! Cookie not set, so killing the little dick before it gets through!
 		}
-		return $result;
+
+		return $comment;
 	}
 
 	/**
