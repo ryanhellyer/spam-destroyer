@@ -314,7 +314,7 @@ class Spam_Destroyer {
 
 		// If the user is logged in, then they're clearly trusted, so continue without checking
 		if ( is_user_logged_in() ) {
-			return $comment;
+			return $result;
 		}
 
 		// Check the hidden input field against the key

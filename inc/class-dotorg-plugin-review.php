@@ -49,15 +49,11 @@ class DotOrg_Plugin_Review {
 
 	/**
 	 * Seconds to words.
-	 * Returns a human readable string to describe the number of seconds.
-	 *
-	 * @param   int     $seconds  The number of seconds
-	 * @return  string            A written description of the time
 	 */
 	public function seconds_to_words( $seconds ) {
 
 		// Get the years
-		$years = ( intval( $seconds ) / MONTH_IN_SECONDS ) % 4;
+		$years = ( intval( $seconds ) / YEAR_IN_SECONDS ) % 4;
 		if ( $years > 1 ) {
 			return sprintf( __( '%s years', $this->slug ), $years );
 		} elseif ( $years > 0) {
