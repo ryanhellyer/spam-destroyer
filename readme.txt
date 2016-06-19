@@ -3,6 +3,7 @@ Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman
 Donate link: https://geek.hellyer.kiwi/products/spam-destroyer/
 Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
 Requires at least: 4.0
+Tested up to: 4.6
 Stable tag: 2.0.7
 Text Domain: spam-destroyer
 License: GPLv2 or later
@@ -23,14 +24,15 @@ Simply install and activate the plugin. No settings necessary.
 For more information, visit the <a href="https://geek.hellyer.kiwi/products/spam-destroyer/">Spam Destroyer plugin page</a>.
 
 
-= Advanced usage =
-
-In extremely rare circumstances, you may find that you need extra spam protection. If this occurs, you can increase the spam protection level via the plugins settings page. The settings page is accessed via the plugins page, beside the "deactivate" button. There you can increase the spam protection level, and clear the spam key cache.
-
-
 == Frequently Asked Questions ==
 
 Check out the FAQ on the <a href="https://geek.hellyer.kiwi/products/spam-destroyer/">Spam Destroyer plugin</a> page.
+
+= Support =
+If you would like to file a bug report or ask a question, please do so in the WordPress.org support forums.
+
+= Who made the plugin? =
+The original developer of the plugin was <a href="https://geek.hellyer.kiwi/">Ryan Hellyer</a>, but many others have contributed code to this project and are now listed as co-authors of the plugin.
 
 
 == Changelog ==
