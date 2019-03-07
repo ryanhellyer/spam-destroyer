@@ -12,3 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Remove options
 delete_option( 'spam-destroyer-stats' );
 delete_option( 'spam-destroyer-key' );
+delete_option( 'spam-destroyer-version' );
+delete_option( 'spam-destroyer-gd-notice-removed' );
+

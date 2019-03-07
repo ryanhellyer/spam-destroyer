@@ -9,7 +9,7 @@
  */
 class Spam_Destroyer {
 
-	public $version = '2.0';                       // The pluin version number
+	public $version = '2.1.2';                     // The plugin version number
 	public $spam_key;                              // Key used for confirmation of bot-like behaviour
 	public $speed = 2;                             // Will be killed as spam if posted faster than this
 	public $encryption_method = 'AES-256-CBC';     // The encryption method used
@@ -34,10 +34,10 @@ class Spam_Destroyer {
 
 		// Possible comment issues
 		$this->comment_issues = array(
-			'hidden-field-not-set' => __( 'Hidden input field not set', 'spam-destroyer' ),
-			'wrong-timestamp'      => __( 'Time not set correctly', 'spam-destroyer' ),
-			'captcha-wrong'        => __( 'CAPTCHA not answered correctly', 'spam-destroyer' ),
-			'cookie-not-set'       => __( 'Cookie not set', 'spam-destroyer' ),
+			'hidden-field-not-set' => esc_html__( 'Hidden input field not set', 'spam-destroyer' ),
+			'wrong-timestamp'      => esc_html__( 'Time not set correctly', 'spam-destroyer' ),
+			'captcha-wrong'        => esc_html__( 'CAPTCHA not answered correctly', 'spam-destroyer' ),
+			'cookie-not-set'       => esc_html__( 'Cookie not set', 'spam-destroyer' ),
 		);
 
 		// Add filters
@@ -58,6 +58,7 @@ class Spam_Destroyer {
 		add_action( 'bbp_theme_before_topic_form_content',  array( $this, 'extra_input_field' ) ); // bbPress signup page
 		add_action( 'bbp_theme_before_reply_form_content',  array( $this, 'extra_input_field' ) ); // bbPress signup page
 		add_action( 'register_form',                        array( $this, 'extra_input_field' ) ); // bbPress user registration page
+		add_action( 'admin_notices',                        array( $this, 'requirements_check' ) ); // Check plugin requirements
 
 	}
 
@@ -71,11 +72,17 @@ class Spam_Destroyer {
 	protected function set_keys() {
 		$this->spam_key = get_option( $this->spam_key_option );
 
-		// If no key set, then generate a one
-		if ( '' == $this->spam_key ) {
+		// If no key set or version number doesn't match, then generate a one
+		if (
+			0 !== version_compare( $this->version, get_option( 'spam-destroyer-version' ) )
+			||
+			'' == $this->spam_key
+		) {
 			$key = $this->generate_new_key();
 			update_option( $this->spam_key_option, $key );
+			update_option( 'spam-destroyer-version', $this->version );
 		}
+
 	}
 
 	/**
@@ -88,7 +95,8 @@ class Spam_Destroyer {
 	 */
 	protected function generate_new_key() {
 		$number = home_url() . rand( 0, 999999 ); // Use home_url() to make it unique and rand() to ensure some randomness in the output
-		$key = md5( $number ); // Use MD5 to ensure a consistent type of string
+		$hash = md5( $number ); // Use MD5 to ensure a consistent type of string
+		$key = 'spam-destroyer-' . $hash;
 		return $key;
 	}
 
@@ -258,8 +266,6 @@ class Spam_Destroyer {
 
 			// Check the hidden input field against the key
 			if ( $_POST['killer_value'] != $this->spam_key ) {
-//echo $_POST['killer_value']."\n";
-//echo $this->spam_key;die;
 				$this->comment_issue = 'hidden-field-not-set';
 				$this->kill_spam_dead( $comment ); // BOOM! Silly billy didn't have the correct input field so killing it before it reaches your eyes.
 			}
@@ -319,24 +325,38 @@ class Spam_Destroyer {
 
 		// Check the hidden input field against the key
 		if ( $_POST['killer_value'] != $this->spam_key ) {
+
 			// BAM! And the spam signup is dead :)
 			if ( isset( $_POST['bbp_topic_id'] ) ) {
-				bbp_add_error('bbp_reply_content', __('Sorry, but you have been detected as spam', 'spam-destroyer' ) );
+				bbp_add_error( 'bbp_reply_content', esc_html__( 'Sorry, but you have been detected as spam', 'spam-destroyer' ) );
 			} else {
-				$result['errors']->add( 'blogname', '' );
+
+				if ( isset( $result['errors'] ) ) {
+					$result['errors']->add( 'blogname', '' );
+				}
+
 			}
 		}
 
 		// Check for cookies presence
 		if ( isset( $_COOKIE[ $this->spam_key ] ) ) {
+
 			// If time not set correctly, then assume it's spam
 			if ( $_COOKIE[$this->spam_key] > 1 && ( ( time() - $_COOKIE[$this->spam_key] ) < $this->speed ) ) {
+
 				// Something's up, since the commenters cookie time frame doesn't match ours
-			$result['errors']->add( 'blogname', '' );
+				if ( isset( $result['errors'] ) ) {
+					$result['errors']->add( 'blogname', '' );
+				}
+
 			}
 		} else {
+
 			// Cookie not set therefore destroy the evil splogger
-			$result['errors']->add( 'blogname', '' );
+			if ( isset( $result['errors'] ) ) {
+				$result['errors']->add( 'blogname', '' );
+			}
+
 		}
 		return $result;
 	}
@@ -379,6 +399,12 @@ class Spam_Destroyer {
 		// Adding hook for tracking killed spams
 		do_action( 'spam_destroyer_death' );
 
+		// Don't provide CAPTCHA if GD not enabled
+		$test_gd = get_extension_funcs( 'gd' );
+		if ( ! $test_gd ) {
+			wp_die( esc_html__(  'Sorry, but your comment was rejected as it was detected as spam.', 'spam-destroyer' ) );
+		}
+
 		/*
 		 * Let's give them one less chance to prove they're human :)
 		 * This is necessary to allow JavaScript or Cookie'less users to comment.
@@ -390,7 +416,7 @@ class Spam_Destroyer {
 		$error = '';
 		$error .= '
 		<form action="' . esc_url( site_url() ) . '/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
-			<p>' . __( 'Please confirm you are human by typing the words in the box below.', 'spam-destroyer' ) . '</p>
+			<p>' . esc_html__( 'Please confirm you are human by typing the words in the box below.', 'spam-destroyer' ) . '</p>
 				' . $this->get_captcha_image( $question )
 				. $this->get_extra_input_field() . '
 
@@ -402,7 +428,7 @@ class Spam_Destroyer {
 				</div>
 
 				<p class="form-submit">
-					<input type="submit" name="submit" class="button button-primary" id="submit" value="' . esc_attr( __( 'Submit answer' ) ) . '" />
+					<input type="submit" name="submit" class="button button-primary" id="submit" value="' . esc_attr( esc_html__( 'Submit answer' ) ) . '" />
 					<input type="hidden" name="comment_post_ID" value="' . esc_attr( $comment['comment_post_ID'] ) . '" id="comment_post_ID" />
 					<input type="hidden" name="comment_parent" id="comment_parent" value="' . esc_attr( $comment['comment_parent'] ) . '" />
 				</p>';
@@ -420,7 +446,7 @@ class Spam_Destroyer {
 			if ( isset( $this->comment_issues[$issue_raw] ) ) {
 				$issue_human_readable = $this->comment_issues[$issue_raw]; // Convert to human readable format
 
-				$error .= '<p><a href="#" onclick="alert(\'' . __( 'Your comment was detected as potential spam because', 'spam-destroyer' ) . ' ' . esc_html( $issue_human_readable ) . '\');">' . __( 'Why do I need to answer this?', 'spam-destroyer' ) . '</a></p>';
+				$error .= '<p><a href="#" onclick="alert(\'' . esc_html__( 'Your comment was detected as potential spam because', 'spam-destroyer' ) . ' ' . esc_html( $issue_human_readable ) . '\');">' . esc_html__( 'Why do I need to answer this?', 'spam-destroyer' ) . '</a></p>';
 				$error .= '<input id="failed" name="failed" type="hidden" value="' . esc_attr( $issue_raw ) . '" />';
 				$error .= '<input id="comment_karma" name="comment_karma" type="hidden" value="' . esc_attr( $issue_raw ) . '" />';
 			}
@@ -447,6 +473,43 @@ class Spam_Destroyer {
 		<p>
 			<input type="text" value="" name="spam-destroyer-captcha" />
 		</p>';
+	}
+
+	/**
+	 * Alerts the admin if their site does not meet the plugins requirements.
+	 *
+	 * @author Ryan Hellyer <ryanhehellyer@gmail.com>
+	 * @since 2.1
+	 */
+	public function requirements_check() {
+
+		// This does not include a nonce check, but it's only for hiding a notice so not very important anyway
+		if (
+			isset( $_GET['remove_spam_destroyer_gd_notice'] )
+			&&
+			current_user_can( 'manage_options' )
+		) {
+			update_option( 'spam-destroyer-gd-notice-removed', '1' );
+		}
+
+		// Only display an error message if the notice has been previously hidden and GD not enable
+		$test_gd = get_extension_funcs( 'gd' );
+		if (
+			'1' !== get_option( 'spam-destroyer-gd-notice-removed' )
+			&&
+			! $test_gd
+		) {
+			echo '
+			<div class="notice notice-error" style="position:relative">
+				<p>
+					' . esc_html__( 'The Spam Destroyer plugin requires the GD library for when comments are detected as spam. When commenters are detected as spam, they are served a CAPTCHA as a double check to confirm they are not spammers. Due to the GD library not being detected on your site, the fallback CAPTCHA system has been disabled.', 'spam-destroyer' ) . '
+				</p>
+				<a href="' . esc_url( admin_url( '?remove_spam_destroyer_gd_notice' ) ) . '" class="notice-dismiss"><span class="screen-reader-text">
+					' . esc_html__( 'Dismiss this notice.', 'spam-destroyer' ) . '
+				</span></a>
+			</div>';
+		}
+
 	}
 
 }
