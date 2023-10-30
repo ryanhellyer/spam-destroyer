@@ -1,12 +1,9 @@
 <?php
 /**
- * @todo Perhaps should be labelled "Communal" or something like that.
- * Configurations for the SpamDestroyer plugin.
+ * Shared data and settings for the Spam Destroyer plugin.
  *
- * This file contains the main configurations used across the SpamDestroyer plugin.
- *
- * @package   SpamDestroyer
- * @copyright Copyright (c), Ryan Hellyer
+ * @package   Spam Destroyer
+ * @copyright Copyright ©, Ryan Hellyer
  * @author    Ryan Hellyer <ryanhellyer@gmail.com>
  * @since     1.0
  */
@@ -16,14 +13,11 @@ declare(strict_types=1);
 namespace SpamDestroyer;
 
 /**
- * Configuration settings for the SpamDestroyer plugin.
- *
- * This class contains all the configuration settings that are used throughout
- * the SpamDestroyer plugin.
+ * Configuration settings and other shared data.
  *
  * @package SpamDestroyer
  */
-class Config {
+class Shared {
 	/**
 	 * The plugin version.
 	 *
@@ -37,13 +31,6 @@ class Config {
 	 * @var string
 	 */
 	public const SLUG = 'spam-destroyer';
-
-	/**
-	 * The spam key used for various checks.
-	 *
-	 * @var string
-	 */
-	public $spam_key;
 
 	/**
 	 * Speed limit for posting to avoid being marked as spam.
@@ -124,8 +111,6 @@ class Config {
 	/**
 	 * Get the web IP address from the comment author's URL.
 	 *
-	 * @todo Is the web IP actually returning an IP?.
-	 *
 	 * @param array $comment The comment data.
 	 * @return string The web IP address.
 	 */
@@ -145,8 +130,8 @@ class Config {
 			'cookie-not-set-correctly'  => __( 'There was a cookie problem.', 'spam-destroyer' ),
 			'website-ip-does-not-match' => __( 'The website IP was incorrect.', 'spam-destroyer' ),
 			'page-does-not-exist'       => __( 'The page does not exist.', 'spam-destroyer' ),
-			'page-does-not-mention-us'  => __( 'The page does not mention this website.', 'spam-destroyer' ),	
-			'commenting-too-quickly'    => __( 'The comment was posted too quickly.', 'spam-destroyer' ),	
+			'page-does-not-mention-us'  => __( 'The page does not mention this website.', 'spam-destroyer' ),
+			'commenting-too-quickly'    => __( 'The comment was posted too quickly.', 'spam-destroyer' ),
 		);
 
 		try {

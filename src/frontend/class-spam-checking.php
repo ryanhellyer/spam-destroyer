@@ -5,8 +5,8 @@
  * This file contains the Spam_Checking class, responsible for handling
  * spam-related checks on comments, trackbacks, and pingbacks.
  *
- * @package   SpamDestroyer\Frontend
- * @copyright Copyright (c), Ryan Hellyer
+ * @package   Spam Destroyer
+ * @copyright Copyright ©, Ryan Hellyer
  * @author    Ryan Hellyer <ryanhellyer@gmail.com>
  * @since     1.0
  */
@@ -25,34 +25,34 @@ class Spam_Checking {
 	/**
 	 * The Config class instance.
 	 *
-	 * @var \SpamDestroyer\Config
+	 * @var \SpamDestroyer\Shared
 	 */
-	private $config;
+	private $shared;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Config $config The Config instance.
+	 * @param \SpamDestroyer\Shared $shared The Config instance.
 	 */
-	public function __construct( \SpamDestroyer\Config $config ) {
-		$this->config = $config;
+	public function __construct( \SpamDestroyer\Shared $shared ) {
+		$this->shared = $shared;
 	}
 
 	/**
-	 * Checks if the user is doing something evil
-	 * If they're detected as being evil, then the little bastards are killed dead in their tracks!
+	 * Checks if this is a spam comment.
+	 * If it is detected as a spam comment, then it is killed dead in it's tracks.
 	 *
 	 * @param array $comment The comment.
 	 * @return array The comment.
 	 */
-	public function check_for_comment_evilness( array $comment ): array {
+	public function filter_spam_comments( array $comment ): array {
 
 		try {
 			$type = $comment['comment_type'];
 			if ( 'trackback' === $type || 'pingback' === $type ) {
-				$this->check_trackbacks_and_pingbacks( $comment );
+				$this->validate_trackbacks_and_pingbacks( $comment );
 			} else {
-				$this->check_comment( $comment );
+				$this->validate_comment( $comment );
 			}
 		} catch ( \Exception $e ) {
 			$this->kill_spam_dead( $e->getMessage() );
@@ -73,9 +73,9 @@ class Spam_Checking {
 		// Adding hook for tracking killed spams.
 		do_action( 'spam_destroyer_death' );
 
-		$issue = $this->config->get_error_explanation( $error );
+		$issue = $this->shared->get_error_explanation( $error );
 
-		wp_die( esc_html__( 'Sorry, but your comment was rejected as it was detected as spam.', 'spam-destroyer' ) . '<br><br>' . $issue );
+		wp_die( esc_html__( 'Sorry, but your comment was rejected as it was detected as spam.', 'spam-destroyer' ) . '<br><br>' . esc_html( $issue ) );
 	}
 
 	/**
@@ -85,10 +85,10 @@ class Spam_Checking {
 	 * @return array The comment.
 	 * @throws \Exception If a comment is detected as spam.
 	 */
-	private function check_trackbacks_and_pingbacks( array $comment ): array {
+	private function validate_trackbacks_and_pingbacks( array $comment ): array {
 
 		// Check the website's IP against the url it's sending as a trackback, mark as spam if they don't match.
-		if ( $this->config->get_server_ip() !== $this->config->get_web_ip() ) {
+		if ( $this->shared->get_server_ip() !== $this->shared->get_web_ip( $comment ) ) {
 			throw new \Exception( 'website-ip-does-not-match' );
 		}
 
@@ -122,12 +122,12 @@ class Spam_Checking {
 	 * @return array The checked comment.
 	 * @throws \Exception If a comment is detected as spam.
 	 */
-	private function check_comment( array $comment ): array {
+	private function validate_comment( array $comment ): array {
 		$killer_value      = filter_input( INPUT_POST, 'killer_value' );
-		$cookie_time_stamp = filter_input( INPUT_COOKIE, $this->config->get_spam_key() );
+		$cookie_time_stamp = filter_input( INPUT_COOKIE, $this->shared->get_spam_key() );
 
 		// Check the hidden input field against the key.
-		if ( $killer_value !== $this->config->get_spam_key() ) {
+		if ( $killer_value !== $this->shared->get_spam_key() ) {
 			throw new \Exception( 'hidden-field-not-set' );
 		}
 
@@ -138,7 +138,7 @@ class Spam_Checking {
 
 		// Check if the commenter posted within a reasonable time frame.
 		$time_delay = time() - $cookie_time_stamp;
-		if ( $time_delay < $this->config::SPEED ) {
+		if ( $time_delay < $this->shared::SPEED ) {
 			throw new \Exception( 'commenting-too-quickly' );
 		}
 

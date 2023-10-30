@@ -1,10 +1,10 @@
 === Spam Destroyer ===
 Contributors: ryanhellyer, bjornjohansen, dimadin, brianlayman
 Donate link: https://geek.hellyer.kiwi/products/spam-destroyer/
-Tags: spam, comments, anti-spam, antispam, buddypress, bbpress, kill, destroy, eliminate, registration, register, registrate, captcha
-Requires at least: 5.0
-Tested up to: 5.9.9
-Stable tag: 2.1.3
+Tags: spam, comments, anti-spam, antispam, kill, destroy, eliminate
+Requires at least: 6.4
+Tested up to: 6.4
+Stable tag: 3.0
 Text Domain: spam-destroyer
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -36,6 +36,9 @@ The original developer of the plugin was <a href="https://geek.hellyer.kiwi/">Ry
 
 
 == Changelog ==
+
+= 3.0 alpha  (2023-10-30) =
+* Major update to improve code
 
 = 2.1.3  (2021-10-21) =
 * Minor change to remove "out of date" notice on WordPress.org

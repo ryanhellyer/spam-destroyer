@@ -1,42 +1,48 @@
 /**
- * Add/read cookie
+ * Create a cookie with the given name.
  *
  * Based on code from
  * http://www.quirksmode.org/js/cookies.html
+ *
+ * @param {string} name - The name of the cookie.
  */
-function sdCreateCookie(name) {
-	var unix = Math.round(+new Date()/1000); // Current time in seconds
-	var expire = new Date(); // Current time in miliseconds
-	expire.setTime(expire.getTime()+(spam_destroyer.lifetime*1000)); // Cookie lifetime in seconds * 1000 miliseconds
-	var expires = "; expires="+expire.toUTCString();
-	document.cookie = name+"="+unix+expires+"; path=/";
-}
-
-function sdReadCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
+const sdCreateCookie = (name) => {
+	const unix = Math.round(Date.now() / 1000); // Current time in seconds
+	const expire = new Date();
+	expire.setTime(expire.getTime() + (spam_destroyer.lifetime * 1000)); // Cookie lifetime in milliseconds
+	const expires = `; expires=${expire.toUTCString()}`;
+	document.cookie = `${name}=${unix}${expires}; path=/`;
+};
 
 /**
- * Set cookie if not exists
+ * Read a cookie by its name.
+ *
+ * @param {string} name - The name of the cookie to read.
+ * @return {string|null} - The cookie value or null if not found.
  */
-function sdCheckCookies() {
-	var x = sdReadCookie(spam_destroyer.key)
-	if (x) {
-		// If cookie is set, do nothing
-	} else {
+const sdReadCookie = (name) => {
+	const nameEQ = `${name}=`;
+	const cookies = document.cookie.split(';').map(c => c.trim());
+	const foundCookie = cookies.find(c => c.indexOf(nameEQ) === 0);
+	return foundCookie ? foundCookie.substring(nameEQ.length) : null;
+};
+
+/**
+ * Check if cookies are set, if not create them.
+ */
+const sdCheckCookies = () => {
+	const cookieValue = sdReadCookie(spam_destroyer.key);
+	if (!cookieValue) {
 		sdCreateCookie(spam_destroyer.key);
 	}
-}
+};
+	
+// Initialize cookies
 sdCheckCookies();
 
-// Replace hidden input field with key
+// Replace hidden input field with key, if the element exists
 try {
 	document.getElementById('killer_value').value = spam_destroyer.key;
-} catch (e) {}
+} catch (e) {
+	console.error('Could not set the killer_value:', e);
+}

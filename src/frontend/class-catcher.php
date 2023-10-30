@@ -5,7 +5,7 @@
  * Contains the Catcher class which handles spam prevention logic.
  *
  * @package   Spam Destroyer
- * @copyright Copyright (c), Ryan Hellyer
+ * @copyright Copyright ©, Ryan Hellyer
  * @author    Ryan Hellyer <ryanhellyer@gmail.com>
  * @since     1.0
  */
@@ -22,13 +22,15 @@ namespace SpamDestroyer\Frontend;
 class Catcher {
 	/**
 	 * The Config class instance.
+	 * Used for sharing common configuration settings across different parts of the plugin.
 	 *
-	 * @var \SpamDestroyer\Config
+	 * @var \SpamDestroyer\Shared
 	 */
-	private $config;
+	private $shared;
 
 	/**
 	 * The Spam Checking class instance.
+	 * Responsible for the logic that identifies and filters spam content.
 	 *
 	 * @var \SpamDestroyer\Frontend\Spam_Checking
 	 */
@@ -36,6 +38,7 @@ class Catcher {
 
 	/**
 	 * The Asset Loading class instance.
+	 * Manages the loading of JavaScript and CSS files needed by the plugin.
 	 *
 	 * @var \SpamDestroyer\Frontend\Asset_Loading
 	 */
@@ -44,53 +47,60 @@ class Catcher {
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Config                 $config The Config instance.
+	 * @param \SpamDestroyer\Shared                 $shared The Config instance.
 	 * @param \SpamDestroyer\Frontend\Spam_Checking $spam_checking The Spam Checking instance.
 	 * @param \SpamDestroyer\Frontend\Asset_Loading $asset_loading The Asset Loading instance.
 	 */
 	public function __construct(
-		\SpamDestroyer\Config $config,
+		\SpamDestroyer\Shared $shared,
 		\SpamDestroyer\Frontend\Spam_Checking $spam_checking,
 		\SpamDestroyer\Frontend\Asset_Loading $asset_loading
 	) {
-		$this->config        = $config;
+		$this->shared        = $shared;
 		$this->spam_checking = $spam_checking;
 		$this->asset_loading = $asset_loading;
 	}
 
 	/**
-	 * Preparing to launch the almighty spam attack!
-	 * Spam, prepare for your imminent death!
+	 * Initializes the spam prevention measures.
+	 * Registers the register_spam_prevention_hooks_and_filters method to the WordPress 'init' action hook.
 	 */
 	public function init() {
-		add_action( 'init', array( $this, 'add_hooks_and_filters' ) );
+		add_action( 'init', array( $this, 'register_spam_prevention_hooks_and_filters' ) );
 	}
 
 	/**
-	 * Adds hooks and filters.
+	 * Registers spam prevention hooks and filters.
 	 *
-	 * If the user is logged in, they are trusted and no checks are made.
-	 * Otherwise, various filters and actions are added to combat spam.
+	 * Adds actions and filters for handling comment spam, unless the user is logged in.
+	 * Logged-in users bypass spam checks.
 	 */
-	public function add_hooks_and_filters() {
+	public function register_spam_prevention_hooks_and_filters() {
 
 		// If the user is logged in, then they're clearly trusted, so continue without checking.
 		if ( is_user_logged_in() ) {
 			return;
 		}
 
-		add_filter( 'preprocess_comment', array( $this->spam_checking, 'check_for_comment_evilness' ) ); // Support for regular post/page comments.
-		add_action( 'comment_form', array( $this, 'extra_input_field' ) ); // WordPress comments page.
+		add_filter( 'preprocess_comment', array( $this->spam_checking, 'filter_spam_comments' ) ); // Support for regular post/page comments.
+		add_action( 'comment_form', array( $this, 'display_extra_input_field' ) ); // WordPress comments page.
 	}
 
 	/**
 	 * Display the extra input field on the page.
 	 */
-	public function extra_input_field() {
+	public function display_extra_input_field() {
 		$field = $this->get_extra_input_field();
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $field; // Doesn't need to be escaped as escaping is handled within get_extra_input_field().
+		$allowed_html = array(
+			'input' => array(
+				'type'  => array(),
+				'id'    => array(),
+				'name'  => array(),
+				'value' => array(),
+			),
+		);
+		echo wp_kses( $field, $allowed_html );
 	}
 
 	/**

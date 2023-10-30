@@ -1,9 +1,11 @@
 <?php
 /**
  * Handles the key setting functionality for the Spam Destroyer plugin.
+ * Keys need to be set in advance and stored, so that the spam blocking
+ * system can detect when spammers don't implement the keys correctly.
  *
- * @package   SpamDestroyer\Frontend
- * @copyright Copyright (c) Ryan Hellyer
+ * @package   Spam Destroyer
+ * @copyright Copyright © Ryan Hellyer
  * @author    Ryan Hellyer <ryanhellyer@gmail.com>
  * @since     1.0
  */
@@ -21,22 +23,21 @@ class Set_Keys {
 	/**
 	 * The Config class instance.
 	 *
-	 * @var \SpamDestroyer\Config
+	 * @var \SpamDestroyer\Shared
 	 */
-	private $config;
+	private $shared;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Config $config The Config instance.
+	 * @param \SpamDestroyer\Shared $shared The Config instance.
 	 */
-	public function __construct( \SpamDestroyer\Config $config ) {
-		$this->config = $config;
+	public function __construct( \SpamDestroyer\Shared $shared ) {
+		$this->shared = $shared;
 	}
 
 	/**
-	 * Preparing to launch the almighty spam attack!
-	 * Spam, prepare for your imminent death!
+	 * Initializing the class.
 	 */
 	public function init() {
 		$this->set_keys();
@@ -46,16 +47,14 @@ class Set_Keys {
 	 * Set various keys
 	 */
 	private function set_keys() {
+		$is_version_mismatch = version_compare( $this->shared::VERSION, $this->shared->get_stored_plugin_version() ) !== 0;
+		$is_key_empty        = empty( $this->shared->get_spam_key() );
 
-		// If no key set or version number doesn't match, then generate and store new spam keys.
-		if (
-			0 !== version_compare( $this->config::VERSION, $this->config->get_stored_plugin_version() )
-			||
-			'' === $this->config->get_spam_key()
-		) {
+		// Generate and store new spam keys if version doesn't match or key is empty.
+		if ( $is_version_mismatch || $is_key_empty ) {
 			$key = $this->generate_new_key();
-			$this->config->update_spam_key( $key );
-			$this->config->update_stored_plugin_version( $this->config::VERSION );
+			$this->shared->update_spam_key( $key );
+			$this->shared->update_stored_plugin_version( $this->shared::VERSION );
 		}
 	}
 
@@ -65,7 +64,7 @@ class Set_Keys {
 	 * @return string A new spam key.
 	 */
 	private function generate_new_key(): string {
-		$hash = md5( bin2hex( random_bytes( 16 ) ) ); // Use MD5 to ensure a consistent type of string.
+		$hash = md5( uniqid() ); // Use MD5 to ensure a consistent type of string suitable for use in an HTML attribute.
 		$key  = 'spam-destroyer-' . $hash;
 
 		return $key;

@@ -3,7 +3,7 @@
         'name' => 'ryanhellyer/spam-destroyer',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '92273815c4b9eb09639818ca5d200ffd5360fb10',
+        'reference' => '1af61c65ee8ab47226a6928bb567ff973b3fc55c',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -40,7 +40,7 @@
         'ryanhellyer/spam-destroyer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '92273815c4b9eb09639818ca5d200ffd5360fb10',
+            'reference' => '1af61c65ee8ab47226a6928bb567ff973b3fc55c',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

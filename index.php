@@ -44,34 +44,38 @@ namespace SpamDestroyer;
 /**
  * Class autoloader.
  */
-spl_autoload_register(function ($class) {
-	$prefix = 'SpamDestroyer\\';
-	$base_dir = __DIR__ . '/src/';
+spl_autoload_register(
+	function ( $class_name ) {
+		$prefix   = 'SpamDestroyer\\';
+		$base_dir = __DIR__ . '/src/';
 
-	// Strip the namespace from the class.
-	$len = strlen($prefix);
-	if (strncmp($class, $prefix, $len) === 0) {
-		$class = substr($class, $len);
+		// If the class does not start with our namespace, then bail out.
+		if ( strpos( $class_name, $prefix ) !== 0 ) {
+			return;
+		}
+
+		// Strip the namespace from the class.
+		$len = strlen( $prefix );
+		if ( strncmp( $class_name, $prefix, $len ) === 0 ) {
+				$class = substr( $class_name, $len );
+		}
+
+		$path = strtolower( $class );
+		$path = str_replace( '_', '-', $path );
+		$dirs = explode( '\\', $path );
+
+		// The class is in the root.
+		if ( 1 === count( $dirs ) ) {
+			$path = $base_dir . 'class-' . $dirs[0] . '.php';
+		} else {
+			$path = $base_dir . $dirs[0] . '/class-' . $dirs[1] . '.php';
+		}
+
+		if ( file_exists( $path ) ) {
+			require $path;
+		}
 	}
-
-	$path = strtolower( $class );
-	$path = str_replace( '_', '-', $path );
-	$dirs = explode( '\\', $path );
-
-	// The class is in the root.
-	if ( 1 === count( $dirs ) ) {
-		$path = $base_dir . 'class-' . $dirs[0] . '.php';
-	} else {
-		$path = $base_dir . $dirs[0] . '/class-' . $dirs[1] . '.php';
-	}
-
-//	echo $path.' : ' . $class."\n";
-	if (file_exists($path)) {
-        require $path;
-	} else {
-//		echo $path;die;//@todo remove
-	}
-});
+);
 
 $plugin_instances = Factory::create();
 foreach ( $plugin_instances as $instance ) {
@@ -79,8 +83,3 @@ foreach ( $plugin_instances as $instance ) {
 		$instance->init();
 	}
 }
-
-
-/*
-@todo  LOOK FOR REFERENCES TO GRAVITY FORMS ETC.
-*/

@@ -1,17 +1,25 @@
 <?php
-
-/*
- * Uninstaller script
- * Only runs when the plugin is being uninstalled via the WordPress admin panel
+/**
+ * Uninstaller Script for Spam Destroyer
+ *
+ * This file is run when the plugin is uninstalled via the WordPress admin panel.
+ *
+ * @package Spam Destroyer
  */
 
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
-	die( 'What you doin?' );
+	die( 'Unauthorized access!' );
 }
 
-// Remove options
-delete_option( 'spam-destroyer-stats' );
-delete_option( 'spam-destroyer-key' );
-delete_option( 'spam-destroyer-version' );
-delete_option( 'spam-destroyer-gd-notice-removed' );
+/**
+ * Remove plugin options from the database.
+ */
+$options = array(
+	'spam-destroyer-key',
+	'spam-destroyer-version',
+);
 
+foreach ( $options as $option ) {
+	delete_option( $option );
+}

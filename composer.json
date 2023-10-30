@@ -23,12 +23,12 @@
 			"url": "git@github.com:ryanhellyer/spam-destroyer.git"
 		}
 	],
-	"require-dev": {
-		"squizlabs/php_codesniffer": "^3.0",
-		"wp-coding-standards/wpcs": "*"
-	},
-	"scripts": {
-		"phpcs": "./vendor/bin/phpcs --standard=WordPress",
-		"phpcbf": "./vendor/bin/phpcbf --standard=WordPress"
-	}
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.0",
+        "wp-coding-standards/wpcs": "*"
+    },
+    "scripts": {
+        "phpcs": "./vendor/bin/phpcs --standard=WordPress",
+        "phpcbf": "./vendor/bin/phpcbf --standard=WordPress"
+    }
 }

@@ -6,7 +6,6 @@
  * @subpackage Admin
  * @author     Ryan Hellyer <ryanhellyer@gmail.com>
  * @license    Copyright ©, Ryan Hellyer
- * @since      1.8
  * @link       http://wordpress.stackexchange.com/questions/97553/adding-another-state-spam-reject-approve-to-wordpress-comments Source
  */
 
@@ -57,7 +56,7 @@ class Links {
 		$plugin_meta[] = sprintf(
 			'<a href="%s">%s</a>',
 			'https://geek.hellyer.kiwi/plugins/spam-destroyer/',
-			esc_html__( 'Plugin page' )
+			esc_html__( 'Plugin page' ) // Note: doesn't use second argument as this translation is available from within WordPress core.
 		);
 
 		// Add the donations page link.

@@ -14,28 +14,28 @@ namespace SpamDestroyer;
 /**
  * Factory Class
  *
- * Creates instances of the main classes used in the Inpsyde Coding Test Plugin.
+ * Creates instances of the main classes used in the plugin.
  */
 class Factory {
 
 	/**
 	 * Create instances of main plugin classes.
 	 *
-	 * @return object[] An array containing instances of the main plugin classes.
+	 * @return array An array containing instances of the main plugin classes.
 	 */
 	public static function create(): array {
 		$classes = array();
 
-		$config = new Config();
 		if ( is_admin() ) {
-			$classes[] = new Admin\Meta( $config );
 			$classes[] = new Admin\Links();
 		} else {
-			$classes[] = new Frontend\Set_Keys( $config );
+			$shared = new Shared();
+
+			$classes[] = new Frontend\Set_Keys( $shared );
 			$classes[] = new Frontend\Catcher(
-				$config,
-				new Frontend\Spam_Checking( $config ),
-				new Frontend\Asset_Loading( $config )
+				$shared,
+				new Frontend\Spam_Checking( $shared ),
+				new Frontend\Asset_Loading( $shared )
 			);
 		}
 
