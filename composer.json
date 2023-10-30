@@ -12,12 +12,6 @@
 	"require": {
 		"php": ">=8.0"
 	},
-	"autoload": {
-		"psr-4": {
-			"SpamDestroyer\\": "src/",
-            "SpamDestroyer\\Admin\\": "src/Admin/"
-		}
-	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
@@ -29,12 +23,12 @@
 			"url": "git@github.com:ryanhellyer/spam-destroyer.git"
 		}
 	],
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^3.0",
-        "wp-coding-standards/wpcs": "*"
-    },
-    "scripts": {
-        "phpcs": "./vendor/bin/phpcs --standard=WordPress",
-        "phpcbf": "./vendor/bin/phpcbf --standard=WordPress"
-    }
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.0",
+		"wp-coding-standards/wpcs": "*"
+	},
+	"scripts": {
+		"phpcs": "./vendor/bin/phpcs --standard=WordPress",
+		"phpcbf": "./vendor/bin/phpcbf --standard=WordPress"
+	}
 }

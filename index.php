@@ -41,7 +41,37 @@ declare(strict_types=1);
 
 namespace SpamDestroyer;
 
-require_once __DIR__ . '/vendor/autoload.php';
+/**
+ * Class autoloader.
+ */
+spl_autoload_register(function ($class) {
+	$prefix = 'SpamDestroyer\\';
+	$base_dir = __DIR__ . '/src/';
+
+	// Strip the namespace from the class.
+	$len = strlen($prefix);
+	if (strncmp($class, $prefix, $len) === 0) {
+		$class = substr($class, $len);
+	}
+
+	$path = strtolower( $class );
+	$path = str_replace( '_', '-', $path );
+	$dirs = explode( '\\', $path );
+
+	// The class is in the root.
+	if ( 1 === count( $dirs ) ) {
+		$path = $base_dir . 'class-' . $dirs[0] . '.php';
+	} else {
+		$path = $base_dir . $dirs[0] . '/class-' . $dirs[1] . '.php';
+	}
+
+//	echo $path.' : ' . $class."\n";
+	if (file_exists($path)) {
+        require $path;
+	} else {
+//		echo $path;die;//@todo remove
+	}
+});
 
 $plugin_instances = Factory::create();
 foreach ( $plugin_instances as $instance ) {
@@ -52,41 +82,5 @@ foreach ( $plugin_instances as $instance ) {
 
 
 /*
-// Defining folder locations
-define( 'SPAM_DESTROYER_DIR', dirname( __FILE__ ) );
-define( 'SPAM_DESTROYER_URL', plugin_dir_url( __FILE__ ) );
-
-// Load the bare minimum for the front-end
-require( 'inc/class-spam-destroyer.php' );
-
-// Load extra modules - provides extra protection when required
-require( 'inc/class-spam-destroyer-add-meta.php' );
-require( 'inc/class-spam-destroyer-stats.php' );
-
-// Only load generate CAPTCHA class if appropriate GET request sent
-if ( isset( $_GET['captcha'] ) ) {
-	require( 'inc/class-spam-destroyer-generate-captcha.php' );
-}
-
-// Load admin panel only files
-if ( is_admin() ) {
-
-	require( 'inc/class-spam-destroyer-settings.php' );
-
-	// Loading dotorg plugin review code
-	require( 'inc/class-dotorg-plugin-review.php' );
-	new DotOrg_Plugin_Review(
-		array(
-			'slug'        => 'spam-destroyer', // The plugin slug
-			'name'        => 'Spam Destroyer', // The plugin name
-			'time_limit'  => WEEK_IN_SECONDS,  // The time limit at which notice is shown
-		)
-	);
-
-}
+@todo  LOOK FOR REFERENCES TO GRAVITY FORMS ETC.
 */
-
-
-/*
- TODO:   INCLUDE WP CODING STANDARDS IN composer.json
- */
