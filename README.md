@@ -37,8 +37,6 @@ After activation, the plugin works automatically. No configuration needed.
 
 ## Methods
 
-Sure, here is the documentation for each of the methods and functions for the provided WordPress plugin:
-
 ### src/admin/class-links.php
 
 #### `init()`
