@@ -16,6 +16,8 @@ Spam Destroyer is a WordPress plugin designed to annihilate comment spam on your
 2. Upload the `spam-destroyer` folder to the `/wp-content/plugins/` directory.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 
+Note: Once this becomes stable, it will also be available through both Composer and the official WordPress plugin repository.
+
 ## Usage
 
 After activation, the plugin works automatically. No configuration needed.
