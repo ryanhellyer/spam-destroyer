@@ -18,6 +18,9 @@ The plugin employs two methods for spam prevention: altering a hidden input fiel
 
 In tests, Spam Destroyer proved 20x more effective than Akismet. While both can be used simultaneously, they employ different anti-spam strategies. For servers burdened by spam, is preferable to use Spam Destroyer as well as Aksimet, as it blocks spam before hitting your WordPress database, reducing Akismet's workload.
 
+## Limitations of this Alpha version
+Unlike the stable release, this version does not include a fall-back CAPTCHA for when a user may fail the CAPTCHA due to a browser or general site problem. It also doesn't include support for bbPress, WP multisite, BuddyPress, Jetpack contact forms etc.
+
 ## Installation
 
 1. Download the plugin and extract it.
