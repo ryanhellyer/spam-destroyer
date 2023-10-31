@@ -5,7 +5,6 @@
 Spam Destroyer is a WordPress plugin designed to annihilate comment spam on your website. This plugin uses a combination of JavaScript and PHP to verify the authenticity of comments. 
 
 ## Features
-
 - Cookie-based verification
 - JavaScript key validation
 - Easy to use, zero config
