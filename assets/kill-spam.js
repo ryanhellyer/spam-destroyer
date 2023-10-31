@@ -1,3 +1,8 @@
+/**
+ * This is used for loading the anti-spam payload of the Spam Destroyer plugin.
+ * If this script does not run as intended, the form will submit incorrect data
+ * to the backend, which will reject the form submission as spam.
+ */
 document.addEventListener('DOMContentLoaded', function() {
 	const createCookie = (name) => {
 		const unix = Math.round(Date.now() / 1000); // Current time in seconds
