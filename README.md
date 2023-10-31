@@ -10,6 +10,14 @@ Spam Destroyer is a WordPress plugin designed to annihilate comment spam on your
 - JavaScript key validation
 - Easy to use, zero config
 
+## Mode of Action
+
+The plugin employs two methods for spam prevention: altering a hidden input field via JavaScript and setting a cookie. Both are verified on the backend; incorrect implementation leads to the form being marked as spam and rejected. Most spam bots don't execute JavaScript, making them easily detectable due to the absence of the input field and cookie.
+
+## Akismet Comparison
+
+In tests, Spam Destroyer proved 20x more effective than Akismet. While both can be used simultaneously, they employ different anti-spam strategies. For servers burdened by spam, is preferable to use Spam Destroyer as well as Aksimet, as it blocks spam before hitting your WordPress database, reducing Akismet's workload.
+
 ## Installation
 
 1. Download the plugin and extract it.
