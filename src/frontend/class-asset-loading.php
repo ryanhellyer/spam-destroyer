@@ -51,7 +51,7 @@ class Asset_Loading {
 		// Load the payload.
 		wp_enqueue_script(
 			'kill_it_dead',
-			plugins_url( 'assets/kill.js', dirname( __DIR__ ) ),
+			plugins_url( 'assets/kill-spam.js', dirname( __DIR__ ) ),
 			'',
 			$this->shared::VERSION,
 			true

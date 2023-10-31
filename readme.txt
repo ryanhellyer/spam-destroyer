@@ -9,12 +9,13 @@ Text Domain: spam-destroyer
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+<em><strong>Alpha:</strong> This is an alpha product. For the stable version, please visit <a href="https://wordpress.org/plugins/spam-destroyer/">https://wordpress.org/plugins/spam-destroyer/</a>.</em>
 
 Kills spam dead in it's tracks. Be gone evil demon spam!
 
 == Description ==
 
-Stops automated spam while remaining as unobtrusive as possible to regular commenters. <a href="https://geek.hellyer.kiwi/products/spam-destroyer/">The Spam Destroyer plugin</a> is intended to be effortless to use. Simply install, and enjoy a spam free website :)
+Stops automated spam to the WordPress commenting system, while remaining as unobtrusive as possible to regular commenters. <a href="https://geek.hellyer.kiwi/products/spam-destroyer/">The Spam Destroyer plugin</a> is intended to be effortless to use. Simply install, and enjoy a spam free website :)
 
 
 == Installation ==
@@ -26,7 +27,11 @@ For more information, visit the <a href="https://geek.hellyer.kiwi/products/spam
 
 == Frequently Asked Questions ==
 
-Check out the FAQ on the <a href="https://geek.hellyer.kiwi/products/spam-destroyer/">Spam Destroyer plugin</a> page.
+* What types of spam does this remove?
+Comment spam added via the traditional WordPress comments system
+
+* Do you intend to add support for other types of spam?
+Yes, bbPress, BuddyPress, JetPack contact form, Gravity Forms and other types of spam will be supported soon.
 
 = Support =
 If you would like to file a bug report or ask a question, please do so in the WordPress.org support forums.
