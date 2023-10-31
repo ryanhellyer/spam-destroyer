@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace SpamDestroyer\Frontend;
 
+use SpamDestroyer\Shared;
+
 /**
  * Spam_Checking Class
  *
@@ -25,16 +27,16 @@ class Spam_Checking {
 	/**
 	 * The Config class instance.
 	 *
-	 * @var \SpamDestroyer\Shared
+	 * @var Shared
 	 */
 	private $shared;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Shared $shared The Config instance.
+	 * @param Shared $shared The Config instance.
 	 */
-	public function __construct( \SpamDestroyer\Shared $shared ) {
+	public function __construct( Shared $shared ) {
 		$this->shared = $shared;
 	}
 

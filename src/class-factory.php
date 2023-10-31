@@ -33,7 +33,6 @@ class Factory {
 
 			$classes[] = new Frontend\Set_Keys( $shared );
 			$classes[] = new Frontend\Catcher(
-				$shared,
 				new Frontend\Spam_Checking( $shared ),
 				new Frontend\Asset_Loading( $shared )
 			);

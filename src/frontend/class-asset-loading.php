@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace SpamDestroyer\Frontend;
 
+use SpamDestroyer\Shared;
+
 /**
  * Manages asset loading for the Spam Destroyer plugin.
  *
@@ -25,16 +27,16 @@ class Asset_Loading {
 	/**
 	 * The Shared class instance.
 	 *
-	 * @var \SpamDestroyer\Shared
+	 * @var Shared
 	 */
 	private $shared;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Shared $shared The Shared instance.
+	 * @param Shared $shared The Shared instance.
 	 */
-	public function __construct( \SpamDestroyer\Shared $shared ) {
+	public function __construct( Shared $shared ) {
 		$this->shared = $shared;
 	}
 

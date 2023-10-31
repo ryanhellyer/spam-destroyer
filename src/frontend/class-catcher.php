@@ -14,25 +14,21 @@ declare(strict_types=1);
 
 namespace SpamDestroyer\Frontend;
 
+use SpamDestroyer\Frontend\Spam_Checking;
+use SpamDestroyer\Frontend\Asset_Loading;
+
 /**
  * Catcher Class
  *
  * This class contains the logic for preventing spam.
  */
 class Catcher {
-	/**
-	 * The Config class instance.
-	 * Used for sharing common configuration settings across different parts of the plugin.
-	 *
-	 * @var \SpamDestroyer\Shared
-	 */
-	private $shared;
 
 	/**
 	 * The Spam Checking class instance.
 	 * Responsible for the logic that identifies and filters spam content.
 	 *
-	 * @var \SpamDestroyer\Frontend\Spam_Checking
+	 * @var Spam_Checking
 	 */
 	private $spam_checking;
 
@@ -40,23 +36,20 @@ class Catcher {
 	 * The Asset Loading class instance.
 	 * Manages the loading of JavaScript and CSS files needed by the plugin.
 	 *
-	 * @var \SpamDestroyer\Frontend\Asset_Loading
+	 * @var Asset_Loading
 	 */
 	private $asset_loading;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Shared                 $shared The Config instance.
-	 * @param \SpamDestroyer\Frontend\Spam_Checking $spam_checking The Spam Checking instance.
-	 * @param \SpamDestroyer\Frontend\Asset_Loading $asset_loading The Asset Loading instance.
+	 * @param Spam_Checking $spam_checking The Spam Checking instance.
+	 * @param Asset_Loading $asset_loading The Asset Loading instance.
 	 */
 	public function __construct(
-		\SpamDestroyer\Shared $shared,
-		\SpamDestroyer\Frontend\Spam_Checking $spam_checking,
-		\SpamDestroyer\Frontend\Asset_Loading $asset_loading
+		Spam_Checking $spam_checking,
+		Asset_Loading $asset_loading
 	) {
-		$this->shared        = $shared;
 		$this->spam_checking = $spam_checking;
 		$this->asset_loading = $asset_loading;
 	}

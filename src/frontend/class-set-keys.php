@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace SpamDestroyer\Frontend;
 
+use SpamDestroyer\Shared;
+
 /**
  * Set_Keys Class
  *
@@ -23,16 +25,16 @@ class Set_Keys {
 	/**
 	 * The Config class instance.
 	 *
-	 * @var \SpamDestroyer\Shared
+	 * @var Shared
 	 */
 	private $shared;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param \SpamDestroyer\Shared $shared The Config instance.
+	 * @param Shared $shared The Config instance.
 	 */
-	public function __construct( \SpamDestroyer\Shared $shared ) {
+	public function __construct( Shared $shared ) {
 		$this->shared = $shared;
 	}
 
@@ -64,7 +66,7 @@ class Set_Keys {
 	 * @return string A new spam key.
 	 */
 	private function generate_new_key(): string {
-		$hash = md5( uniqid() ); // Use MD5 to ensure a consistent type of string suitable for use in an HTML attribute.
+		$hash = md5( uniqid() ); // Use MD5 to ensure a consistent type of string .
 		$key  = 'spam-destroyer-' . $hash;
 
 		return $key;
